@@ -32,7 +32,7 @@ main{
 }
 .intro{margin-bottom:18px;color:#77746B;font-size:13px;letter-spacing:.08em}
 
-/* 开场标题，保留原来的动画 */
+/* 开场动画：保留原版 */
 
 .title-line{
   display:flex;align-items:flex-start;white-space:nowrap;
@@ -72,7 +72,7 @@ main{
   font-size:13px;line-height:1.9
 }
 
-/* 作品集总区域 */
+/* 作品集 */
 
 .portfolio{
   max-width:1500px;width:100%;margin:20px auto 100px;padding:0 6%;
@@ -85,7 +85,7 @@ main{
 }
 .archive-top{
   display:flex;justify-content:space-between;align-items:end;
-  gap:20px;margin-bottom:45px
+  gap:20px;margin-bottom:55px
 }
 .archive-kicker,.eyebrow{
   color:#8A877E;font-size:10px;letter-spacing:.16em;text-transform:uppercase
@@ -96,11 +96,11 @@ main{
 }
 .archive-note{color:#77746B;font-size:11px;letter-spacing:.1em;text-align:right}
 
-/* 每一层的标题和导航 */
+/* 导航 */
 
 .view-heading{
   display:flex;justify-content:space-between;align-items:end;
-  gap:20px;margin-bottom:28px
+  gap:20px;margin-bottom:35px
 }
 .view-title{
   margin-top:8px;font-size:clamp(30px,4vw,46px);
@@ -111,7 +111,7 @@ main{
 }
 .breadcrumbs{
   display:flex;flex-wrap:wrap;align-items:center;gap:9px;
-  margin-bottom:25px;color:#8A877E;font-size:10px;letter-spacing:.1em
+  margin-bottom:30px;color:#8A877E;font-size:10px;letter-spacing:.1em
 }
 .crumb{
   border:0;background:none;color:#8A877E;font:inherit;
@@ -127,74 +127,127 @@ main{
 }
 .back-button:hover{background:#292820;color:#F1EEE6;border-color:#292820}
 
-/* 国家和地区色块 */
+/* 中央竖向色块阵列 */
 
 .place-grid{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:18px
+  display:grid;
+  grid-template-columns:repeat(2,116px);
+  justify-content:center;
+  gap:12px;
+  width:max-content;
+  max-width:100%;
+  margin:55px auto 75px;
+}
+.place-grid.region-grid{
+  grid-template-columns:repeat(3,116px);
 }
 .place-card{
-  position:relative;isolation:isolate;overflow:hidden;min-height:260px;
-  border:0;border-radius:3px;padding:27px;text-align:left;
-  display:flex;flex-direction:column;justify-content:space-between;
-  color:#292820;cursor:pointer;--tile-color:#C6C3B4;
-  background:var(--tile-color);
-  transition:transform .55s cubic-bezier(.2,.7,.2,1),box-shadow .4s;
-  animation:tileAppear .65s both
-}
-.place-card::before{
-  content:"";position:absolute;inset:0;z-index:-2;
-  background-image:var(--tile-image);background-size:cover;
-  background-position:center;opacity:.17;
-  transition:transform .8s cubic-bezier(.2,.7,.2,1),opacity .5s
-}
-.place-card::after{
-  content:"";position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(135deg,transparent 25%,rgba(255,255,255,.15));
-  pointer-events:none
+  position:relative;
+  width:116px;
+  height:190px;
+  overflow:hidden;
+  border:0;
+  border-radius:1px;
+  padding:14px 11px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  text-align:left;
+  color:#292820;
+  cursor:pointer;
+  background:#E5E1D8;
+  --tile-color:#B9BCA8;
+  transition:
+    background-color 1.1s ease,
+    transform .45s cubic-bezier(.2,.7,.2,1),
+    box-shadow .45s ease;
+  animation:tileAppear .65s both;
 }
 .place-card:hover{
-  transform:translateY(-5px);box-shadow:0 16px 35px rgba(48,43,34,.12)
+  background:var(--tile-color);
+  transform:translateY(-4px);
+  box-shadow:0 12px 28px rgba(48,43,34,.09);
+  transition:
+    background-color .28s ease,
+    transform .45s cubic-bezier(.2,.7,.2,1),
+    box-shadow .45s ease;
 }
-.place-card:hover::before{transform:scale(1.08);opacity:.3}
+.place-card:focus-visible{
+  outline:2px solid #77746B;
+  outline-offset:4px;
+}
 .place-card-top,.place-card-bottom{
-  display:flex;justify-content:space-between;align-items:center;gap:15px
+  display:flex;justify-content:space-between;align-items:center;
+  gap:5px;opacity:0;transition:opacity .25s ease
 }
-.place-index{font-size:10px;letter-spacing:.13em;opacity:.7}
-.place-count{font-size:10px;letter-spacing:.12em;opacity:.8}
+.place-card:hover .place-card-top,
+.place-card:hover .place-card-bottom{opacity:.75}
+.place-index,.place-count{
+  font-size:8px;letter-spacing:.08em
+}
 .place-name{
-  display:block;font-size:clamp(28px,4vw,48px);font-weight:500;
-  letter-spacing:-.065em;line-height:1
+  display:block;
+  font-size:17px;
+  font-weight:500;
+  letter-spacing:-.045em;
+  line-height:1.2;
+  opacity:0;
+  transform:translateY(7px);
+  transition:opacity .3s ease,transform .3s ease;
 }
 .place-local{
-  margin-top:9px;font-size:12px;letter-spacing:.08em;opacity:.8
+  display:block;
+  margin-top:5px;
+  font-size:10px;
+  letter-spacing:.08em;
+  opacity:0;
+  transform:translateY(5px);
+  transition:opacity .3s ease .04s,transform .3s ease .04s;
 }
-.place-enter{font-size:20px;transition:transform .3s}
-.place-card:hover .place-enter{transform:translateX(6px)}
+.place-card:hover .place-name,
+.place-card:hover .place-local{
+  opacity:1;transform:translateY(0)
+}
+.place-enter{
+  font-size:16px;
+  opacity:0;
+  transition:opacity .25s ease,transform .3s ease
+}
+.place-card:hover .place-enter{opacity:1;transform:translateX(3px)}
 .place-card:nth-child(2){animation-delay:.07s}
 .place-card:nth-child(3){animation-delay:.14s}
 .place-card:nth-child(4){animation-delay:.21s}
-.place-card:nth-child(5){animation-delay:.28s}
-.place-card:nth-child(6){animation-delay:.35s}
 
-/* 页面切换动画 */
+/* 色块扩展转场 */
 
+.transition-cover{
+  position:fixed;
+  z-index:2000;
+  pointer-events:none;
+  transform-origin:center center;
+  background:#B9BCA8;
+  will-change:transform,border-radius,opacity;
+}
+.transition-cover.fade-out{
+  opacity:0;
+  transition:opacity .35s ease;
+}
 .view-content{
   opacity:1;transform:translateY(0);
-  transition:opacity .25s ease,transform .25s ease
+  transition:opacity .3s ease,transform .3s ease
 }
-.view-content.leaving{opacity:0;transform:translateY(15px)}
-.view-content.entering{animation:viewEnter .5s ease both}
+.view-content.leaving{opacity:0;transform:translateY(8px)}
+.view-content.entering{animation:viewEnter .7s ease both}
 @keyframes viewEnter{
-  from{opacity:0;transform:translateY(18px)}
+  from{opacity:0;transform:translateY(12px)}
   to{opacity:1;transform:translateY(0)}
 }
 @keyframes tileAppear{
-  from{opacity:0;transform:translateY(18px)}
+  from{opacity:0;transform:translateY(12px)}
   to{opacity:1;transform:translateY(0)}
 }
 
-/* 地区照片筛选 */
+/* 照片筛选 */
 
 .photo-filters{
   display:flex;flex-wrap:wrap;gap:22px;margin:10px 0 30px;
@@ -250,7 +303,7 @@ main{
 }
 .photo-info strong{color:#292820;font-weight:500}
 
-/* 空地区提示 */
+/* 空状态 */
 
 .empty-state{
   padding:60px 20px;border:1px solid #D8D3C8;
@@ -270,11 +323,11 @@ footer{
   padding:25px 6%;color:#8A877E;font-size:10px;letter-spacing:.08em
 }
 
-/* 全屏照片浏览 */
+/* 全屏照片详情 */
 
 .lightbox{
-  position:fixed;inset:0;z-index:1000;display:flex;align-items:center;
-  justify-content:center;padding:65px 80px;background:rgba(20,20,18,.97);
+  position:fixed;inset:0;z-index:3000;display:flex;align-items:center;
+  justify-content:center;padding:55px 80px;background:rgba(20,20,18,.97);
   opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s ease
 }
 .lightbox.open{opacity:1;visibility:visible}
@@ -288,24 +341,34 @@ footer{
 }
 .lightbox-image{
   display:block;max-width:100%;max-height:100%;object-fit:contain;
-  opacity:0;transition:opacity .25s ease
+  opacity:0;transition:opacity .3s ease
 }
 .lightbox-image.loaded{opacity:1}
 .lightbox-caption{
-  width:100%;max-width:850px;display:flex;justify-content:space-between;
-  align-items:end;gap:20px;padding-top:24px;color:white
+  width:100%;max-width:950px;display:flex;justify-content:space-between;
+  align-items:end;gap:25px;padding-top:23px;color:white
 }
-.lightbox-caption h3{font-size:19px;font-weight:400;margin-bottom:6px}
-.lightbox-caption p{color:#AAA9A2;font-size:10px;letter-spacing:.12em}
+.caption-main{max-width:650px}
+.lightbox-caption h3{font-size:21px;font-weight:400;margin-bottom:8px}
+.lightbox-caption .caption-location{
+  color:#AAA9A2;font-size:10px;letter-spacing:.12em
+}
+.lightbox-description{
+  margin-top:12px;color:#C5C2BA;font-size:12px;line-height:1.8;
+  max-width:600px
+}
+.lightbox-date{
+  margin-top:10px;color:#AAA9A2;font-size:9px;letter-spacing:.12em
+}
 .lightbox-count{color:#AAA9A2;font-size:11px;letter-spacing:.1em;white-space:nowrap}
 .lightbox-close,.lightbox-prev,.lightbox-next{
   position:absolute;border:0;background:transparent;color:white;
   cursor:pointer;font-family:inherit;transition:opacity .2s
 }
 .lightbox-close:hover,.lightbox-prev:hover,.lightbox-next:hover{opacity:.55}
-.lightbox-close{top:25px;right:35px;font-size:28px;font-weight:300}
+.lightbox-close{top:20px;right:35px;font-size:28px;font-weight:300}
 .lightbox-prev,.lightbox-next{
-  top:50%;transform:translateY(-50%);font-size:32px;font-weight:300;padding:15px
+  top:45%;transform:translateY(-50%);font-size:32px;font-weight:300;padding:15px
 }
 .lightbox-prev{left:18px}
 .lightbox-next{right:18px}
@@ -320,19 +383,35 @@ footer{
   .archive-top{align-items:start;flex-direction:column;gap:12px;margin-bottom:35px}
   .archive-note{text-align:left}
   .view-heading{align-items:start;flex-direction:column}
-  .place-grid{grid-template-columns:1fr;gap:13px}
-  .place-card{min-height:190px;padding:22px}
-  .place-name{font-size:38px}
+  .place-grid{
+    grid-template-columns:repeat(2,minmax(0,104px));
+    gap:9px;margin:40px auto 55px
+  }
+  .place-grid.region-grid{
+    grid-template-columns:repeat(3,minmax(0,88px));
+    gap:8px
+  }
+  .place-card{width:100%;height:155px;padding:11px 8px}
+  .place-grid.region-grid .place-card{height:145px}
+  .place-name{font-size:13px}
+  .place-local{font-size:9px}
+  .place-index,.place-count{font-size:7px}
   .photo-gallery{grid-template-columns:1fr;gap:35px}
   .photo-card:nth-child(even){margin-top:0}
   .photo-overlay{opacity:1}
   .photo-overlay span,.photo-overlay strong{transform:translateY(0)}
   .about{flex-direction:column;padding:40px 6% 0}
-  .lightbox{padding:55px 20px 30px}
+  .lightbox{padding:55px 20px 25px}
   .lightbox-prev{left:0}.lightbox-next{right:0}
-  .lightbox-close{top:15px;right:20px}
-  .lightbox-caption h3{font-size:15px}
+  .lightbox-close{top:12px;right:20px}
+  .lightbox-caption h3{font-size:17px}
+  .lightbox-description{font-size:11px}
+  .lightbox-caption{align-items:start}
   footer{font-size:9px}
+}
+@media(max-width:370px){
+  .place-grid.region-grid{grid-template-columns:repeat(3,minmax(0,78px))}
+  .place-grid.region-grid .place-card{height:130px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{
@@ -390,8 +469,6 @@ footer{
   </main>
 </div>
 
-<!-- 国家 / 地区 / 照片档案 -->
-
 <section class="portfolio" id="portfolio">
   <div class="archive-top">
     <div>
@@ -400,7 +477,6 @@ footer{
     </div>
     <div class="archive-note">PLACES · PEOPLE · MOMENTS</div>
   </div>
-
   <div class="view-content" id="viewContent"></div>
 </section>
 
@@ -420,8 +496,6 @@ footer{
   <span>MADE WITH CURIOSITY</span>
 </footer>
 
-<!-- 全屏照片浏览器 -->
-
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="closeLightbox" aria-label="Close">×</button>
   <button class="lightbox-prev" id="prevPhoto" aria-label="Previous">‹</button>
@@ -432,9 +506,11 @@ footer{
       <img class="lightbox-image" id="lightboxImage" src="" alt="">
     </div>
     <div class="lightbox-caption">
-      <div>
+      <div class="caption-main">
         <h3 id="lightboxTitle"></h3>
-        <p id="lightboxLocation"></p>
+        <p class="caption-location" id="lightboxLocation"></p>
+        <p class="lightbox-description" id="lightboxDescription"></p>
+        <p class="lightbox-date" id="lightboxDate"></p>
       </div>
       <div class="lightbox-count" id="lightboxCount"></div>
     </div>
@@ -443,7 +519,7 @@ footer{
 
 <script>
 /* =====================================
-   开场动画：保留原来的拖动逻辑和参数
+   开场动画：原版逻辑和参数
 ===================================== */
 
 const stage = document.getElementById("nameStage");
@@ -547,7 +623,7 @@ render();
 
 /* =====================================
    摄影档案数据
-   后续添加自己的照片，主要修改这里
+   图片和简介目前是演示内容
 ===================================== */
 
 const archive = [
@@ -555,20 +631,47 @@ const archive = [
     id:"china",
     name:"CHINA",
     local:"中国",
-    color:"#B9BCA8",
-    image:"https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=1000",
+    color:"#B9A99A",
     regions:[
       {
         id:"xizang",
         name:"XIZANG",
         local:"西藏",
-        color:"#B5B9A4",
-        image:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1000",
+        color:"#AEB9A8",
         photos:[
-          {title:"Into the Mountains",place:"XIZANG, CHINA",year:"2026",category:"landscape",image:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1800",wide:true},
-          {title:"A Quiet Lake",place:"XIZANG, CHINA",year:"2026",category:"landscape",image:"https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=1800"},
-          {title:"The Long Road",place:"XIZANG, CHINA",year:"2026",category:"landscape",image:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1800"},
-          {title:"A Place to Remember",place:"XIZANG, CHINA",year:"2025",category:"architecture",image:"https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=1800"}
+          {
+            title:"Into the Mountains",
+            place:"XIZANG, CHINA",
+            date:"OCTOBER 2026",
+            category:"landscape",
+            image:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1800",
+            description:"A quiet journey through the mountains. The landscape stretches beyond the horizon, leaving a moment of silence and space to breathe.",
+            wide:true
+          },
+          {
+            title:"A Quiet Lake",
+            place:"XIZANG, CHINA",
+            date:"OCTOBER 2026",
+            category:"landscape",
+            image:"https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=1800",
+            description:"Still water, distant mountains and changing light. A small moment that deserves to be remembered."
+          },
+          {
+            title:"The Long Road",
+            place:"XIZANG, CHINA",
+            date:"OCTOBER 2026",
+            category:"landscape",
+            image:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1800",
+            description:"A road leading into the unknown. Sometimes the journey itself becomes the most memorable part."
+          },
+          {
+            title:"A Place to Remember",
+            place:"XIZANG, CHINA",
+            date:"OCTOBER 2026",
+            category:"architecture",
+            image:"https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=1800",
+            description:"Architecture and landscape meet in a quiet corner of the world."
+          }
         ]
       },
       {
@@ -576,108 +679,87 @@ const archive = [
         name:"ZHEJIANG",
         local:"浙江",
         color:"#C7B8A3",
-        image:"https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=1000",
         photos:[
-          {title:"Lines and Silence",place:"ZHEJIANG, CHINA",year:"2026",category:"architecture",image:"https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=1800"},
-          {title:"Little Moments",place:"ZHEJIANG, CHINA",year:"2025",category:"daily",image:"https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1800"}
+          {
+            title:"Lines and Silence",
+            place:"ZHEJIANG, CHINA",
+            date:"2026",
+            category:"architecture",
+            image:"https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=1800",
+            description:"A study of lines, structures and the quiet beauty of everyday surroundings."
+          },
+          {
+            title:"Little Moments",
+            place:"ZHEJIANG, CHINA",
+            date:"2025",
+            category:"daily",
+            image:"https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1800",
+            description:"Ordinary days are often made of small details that are easy to overlook."
+          }
         ]
       },
       {
-        id:"yunnan",
-        name:"YUNNAN",
-        local:"云南",
-        color:"#AAB8AA",
-        image:"https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1000",
+        id:"jiangsu",
+        name:"JIANGSU",
+        local:"江苏",
+        color:"#B8B9B0",
         photos:[
-          {title:"Somewhere in the Wild",place:"YUNNAN, CHINA",year:"2025",category:"landscape",image:"https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1800"}
+          {
+            title:"A Walk Through the City",
+            place:"JIANGSU, CHINA",
+            date:"2026",
+            category:"architecture",
+            image:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1800",
+            description:"An architectural fragment from a city walk. A record of shapes, light and atmosphere."
+          },
+          {
+            title:"Afternoon Light",
+            place:"JIANGSU, CHINA",
+            date:"2026",
+            category:"daily",
+            image:"https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=1800",
+            description:"The afternoon light slowly changes the familiar scenery into something new."
+          }
         ]
       }
     ]
   },
   {
-    id:"japan",
-    name:"JAPAN",
-    local:"日本",
-    color:"#C9AAA0",
-    image:"https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1000",
+    id:"uae",
+    name:"UAE",
+    local:"阿联酋",
+    color:"#C6B49C",
     regions:[
       {
-        id:"tokyo",
-        name:"TOKYO",
-        local:"东京",
-        color:"#C9AAA0",
-        image:"https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=1000",
+        id:"dubai",
+        name:"DUBAI",
+        local:"迪拜",
+        color:"#C6B49C",
         photos:[
-          {title:"A Quiet Journey",place:"TOKYO, JAPAN",year:"2026",category:"daily",image:"https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1800"},
-          {title:"City Lights",place:"TOKYO, JAPAN",year:"2026",category:"architecture",image:"https://images.unsplash.com/photo-1513407030348-c983a97b98d8?w=1800"}
-        ]
-      },
-      {
-        id:"kyoto",
-        name:"KYOTO",
-        local:"京都",
-        color:"#C5B69D",
-        image:"https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1000",
-        photos:[
-          {title:"Old Streets",place:"KYOTO, JAPAN",year:"2026",category:"architecture",image:"https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1800"}
-        ]
-      },
-      {
-        id:"osaka",
-        name:"OSAKA",
-        local:"大阪",
-        color:"#B8B8A6",
-        image:"https://images.unsplash.com/photo-1590559899731-a382839e5549?w=1000",
-        photos:[
-          {title:"After Dark",place:"OSAKA, JAPAN",year:"2025",category:"daily",image:"https://images.unsplash.com/photo-1590559899731-a382839e5549?w=1800"}
-        ]
-      }
-    ]
-  },
-  {
-    id:"finland",
-    name:"FINLAND",
-    local:"芬兰",
-    color:"#A9BAC0",
-    image:"https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1000",
-    regions:[
-      {
-        id:"helsinki",
-        name:"HELSINKI",
-        local:"赫尔辛基",
-        color:"#A9BAC0",
-        image:"https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1000",
-        photos:[
-          {title:"Northern Light",place:"HELSINKI, FINLAND",year:"2025",category:"landscape",image:"https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1800"}
-        ]
-      }
-    ]
-  },
-  {
-    id:"france",
-    name:"FRANCE",
-    local:"法国",
-    color:"#C5B6A7",
-    image:"https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1000",
-    regions:[
-      {
-        id:"paris",
-        name:"PARIS",
-        local:"巴黎",
-        color:"#C5B6A7",
-        image:"https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1000",
-        photos:[
-          {title:"The City of Light",place:"PARIS, FRANCE",year:"2025",category:"architecture",image:"https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1800"}
-        ]
-      },
-      {
-        id:"provence",
-        name:"PROVENCE",
-        local:"普罗旺斯",
-        color:"#C5B89C",
-        image:"https://images.unsplash.com/photo-1499002238440-d264edd596ec?w=1000",
-        photos:[
-          {title:"A Slower Day",place:"PROVENCE, FRANCE",year:"2025",category:"landscape",image:"https://images.unsplash.com/photo-1499002238440-d264edd596ec?w=1800"}
+          {
+            title:"Between the Buildings",
+            place:"DUBAI, UAE",
+            date:"2026",
+            category:"architecture",
+            image:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1800",
+            description:"A city shaped by contrast, where modern architecture rises above the desert landscape."
+          },
+          {
+            title:"The City at Night",
+            place:"DUBAI, UAE",
+            date:"2026",
+            category:"landscape",
+            image:"https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1800",
+            description:"The city changes character after sunset. Lights, reflections and movement create another side of Dubai."
+          },
+          {
+            title:"Desert Silence",
+            place:"DUBAI, UAE",
+            date:"2026",
+            category:"landscape",
+            image:"https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1800",
+            description:"The desert offers a different kind of quiet, shaped by sand, wind and endless space."
+          }
         ]
       }
     ]
@@ -686,7 +768,7 @@ const archive = [
 
 
 /* =====================================
-   页面层级与国家 / 地区浏览
+   页面层级
 ===================================== */
 
 const viewContent = document.getElementById("viewContent");
@@ -716,20 +798,20 @@ function breadcrumbHTML(){
 }
 
 function countryCardHTML(country,index){
-  const count = photoCount(country);
   return `
-    <button class="place-card" data-country="${country.id}"
-      style="--tile-color:${country.color};--tile-image:url('${country.image}')">
+    <button class="place-card"
+      data-country="${country.id}"
+      style="--tile-color:${country.color}">
       <div class="place-card-top">
-        <span class="place-index">COUNTRY / ${String(index+1).padStart(2,"0")}</span>
-        <span class="place-count">${String(count).padStart(2,"0")} PHOTOS</span>
+        <span class="place-index">${String(index+1).padStart(2,"0")}</span>
+        <span class="place-count">${String(photoCount(country)).padStart(2,"0")}</span>
       </div>
       <div>
         <span class="place-name">${country.name}</span>
         <span class="place-local">${country.local}</span>
       </div>
       <div class="place-card-bottom">
-        <span class="place-count">EXPLORE COUNTRY</span>
+        <span class="place-count">EXPLORE</span>
         <span class="place-enter">↗</span>
       </div>
     </button>`;
@@ -737,18 +819,19 @@ function countryCardHTML(country,index){
 
 function regionCardHTML(region,index){
   return `
-    <button class="place-card" data-region="${region.id}"
-      style="--tile-color:${region.color};--tile-image:url('${region.image}')">
+    <button class="place-card"
+      data-region="${region.id}"
+      style="--tile-color:${region.color}">
       <div class="place-card-top">
-        <span class="place-index">REGION / ${String(index+1).padStart(2,"0")}</span>
-        <span class="place-count">${String(region.photos.length).padStart(2,"0")} PHOTOS</span>
+        <span class="place-index">${String(index+1).padStart(2,"0")}</span>
+        <span class="place-count">${String(region.photos.length).padStart(2,"0")}</span>
       </div>
       <div>
         <span class="place-name">${region.name}</span>
         <span class="place-local">${region.local}</span>
       </div>
       <div class="place-card-bottom">
-        <span class="place-count">EXPLORE REGION</span>
+        <span class="place-count">EXPLORE</span>
         <span class="place-enter">↗</span>
       </div>
     </button>`;
@@ -789,7 +872,7 @@ function renderCountry(countryId){
       </div>
       <button class="back-button" data-action="back-country">← ALL COUNTRIES</button>
     </div>
-    <div class="place-grid">
+    <div class="place-grid region-grid">
       ${currentCountry.regions.map(regionCardHTML).join("")}
     </div>`;
 
@@ -831,7 +914,7 @@ function renderRegion(regionId){
           <div class="photo-frame">
             <img src="${photo.image}" alt="${photo.title}" loading="lazy">
             <div class="photo-overlay">
-              <span>${photo.place} · ${photo.year}</span>
+              <span>${photo.place} · ${photo.date}</span>
               <strong>${photo.title}</strong>
             </div>
           </div>
@@ -859,7 +942,77 @@ function animateView(){
 
 
 /* =====================================
-   点击国家、地区、返回导航
+   色块扩展转场
+===================================== */
+
+let isTransitioning = false;
+
+function changeView(callback,sourceElement){
+  if(isTransitioning)return;
+  isTransitioning = true;
+
+  const rect = sourceElement
+    ? sourceElement.getBoundingClientRect()
+    : {
+        left:window.innerWidth/2-25,
+        top:window.innerHeight/2-40,
+        width:50,
+        height:80
+      };
+
+  const cover = document.createElement("div");
+  cover.className = "transition-cover";
+  cover.style.left = rect.left+"px";
+  cover.style.top = rect.top+"px";
+  cover.style.width = rect.width+"px";
+  cover.style.height = rect.height+"px";
+  cover.style.background = sourceElement
+    ? getComputedStyle(sourceElement).getPropertyValue("--tile-color").trim()
+    : "#C5B9A7";
+
+  document.body.appendChild(cover);
+
+  viewContent.classList.add("leaving");
+
+  const animation = cover.animate([
+    {
+      left:rect.left+"px",
+      top:rect.top+"px",
+      width:rect.width+"px",
+      height:rect.height+"px",
+      borderRadius:"1px"
+    },
+    {
+      left:"0px",
+      top:"0px",
+      width:window.innerWidth+"px",
+      height:window.innerHeight+"px",
+      borderRadius:"0px"
+    }
+  ],{
+    duration:650,
+    easing:"cubic-bezier(.72,0,.18,1)",
+    fill:"forwards"
+  });
+
+  animation.onfinish = ()=>{
+    callback();
+
+    viewContent.classList.remove("leaving");
+    viewContent.classList.add("entering");
+
+    cover.classList.add("fade-out");
+
+    setTimeout(()=>{
+      cover.remove();
+      isTransitioning = false;
+    },380);
+  };
+}
+
+
+/* =====================================
+   点击国家、地区、返回
 ===================================== */
 
 viewContent.addEventListener("click",event=>{
@@ -867,22 +1020,26 @@ viewContent.addEventListener("click",event=>{
   const regionButton = event.target.closest("[data-region]");
   const crumb = event.target.closest("[data-level]");
   const action = event.target.closest("[data-action]");
+  const filter = event.target.closest("[data-category-filter]");
 
   if(countryButton){
     const id = countryButton.dataset.country;
-    changeView(()=>renderCountry(id));
+    changeView(()=>renderCountry(id),countryButton);
     return;
   }
 
   if(regionButton){
     const id = regionButton.dataset.region;
-    changeView(()=>renderRegion(id));
+    changeView(()=>renderRegion(id),regionButton);
     return;
   }
 
   if(crumb){
     const level = crumb.dataset.level;
-    if(level==="home")changeView(renderHome);
+
+    if(level==="home"){
+      changeView(renderHome);
+    }
     if(level==="country" && currentCountry){
       const id = currentCountry.id;
       changeView(()=>renderCountry(id));
@@ -891,7 +1048,9 @@ viewContent.addEventListener("click",event=>{
   }
 
   if(action){
-    if(action.dataset.action==="back-country")changeView(renderHome);
+    if(action.dataset.action==="back-country"){
+      changeView(renderHome);
+    }
     if(action.dataset.action==="back-region" && currentCountry){
       const id = currentCountry.id;
       changeView(()=>renderCountry(id));
@@ -899,9 +1058,9 @@ viewContent.addEventListener("click",event=>{
     return;
   }
 
-  const filter = event.target.closest("[data-category-filter]");
   if(filter){
     const category = filter.dataset.categoryFilter;
+
     viewContent.querySelectorAll(".photo-filter").forEach(button=>{
       button.classList.toggle("active",button===filter);
     });
@@ -922,25 +1081,19 @@ viewContent.addEventListener("click",event=>{
   }
 });
 
-function changeView(callback){
-  viewContent.classList.add("leaving");
-  setTimeout(()=>{
-    callback();
-    viewContent.classList.remove("leaving");
-  },180);
-}
-
 renderHome();
 
 
 /* =====================================
-   沉浸式图片浏览
+   全屏照片详情
 ===================================== */
 
 const lightbox = document.getElementById("lightbox");
 const lightboxImage = document.getElementById("lightboxImage");
 const lightboxTitle = document.getElementById("lightboxTitle");
 const lightboxLocation = document.getElementById("lightboxLocation");
+const lightboxDescription = document.getElementById("lightboxDescription");
+const lightboxDate = document.getElementById("lightboxDate");
 const lightboxCount = document.getElementById("lightboxCount");
 
 const closeButton = document.getElementById("closeLightbox");
@@ -968,14 +1121,18 @@ function showLightboxPhoto(){
   lightboxImage.classList.remove("loaded");
   lightboxImage.src = photo.image;
   lightboxImage.alt = photo.title;
+
   lightboxTitle.textContent = photo.title;
-  lightboxLocation.textContent = photo.place+" · "+photo.year;
+  lightboxLocation.textContent = photo.place;
+  lightboxDescription.textContent = photo.description || "";
+  lightboxDate.textContent = photo.date || "";
 
   lightboxCount.textContent =
     String(currentIndex+1).padStart(2,"0")+" / "+
     String(lightboxCards.length).padStart(2,"0");
 
   lightboxImage.onload=()=>lightboxImage.classList.add("loaded");
+
   if(lightboxImage.complete && lightboxImage.naturalWidth>0){
     lightboxImage.classList.add("loaded");
   }
