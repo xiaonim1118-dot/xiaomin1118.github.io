@@ -4,11 +4,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Min. | Individual Notebook</title>
+<title>Min. | My Individual Notebook</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 * {
@@ -21,8 +21,8 @@ body {
   background: #f1eee6;
   color: #292820;
   font-family: 'DM Sans', sans-serif;
-  overflow: hidden;
   height: 100vh;
+  overflow: hidden;
 }
 
 .page {
@@ -52,91 +52,77 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: visible;
 }
 
 .stage {
   position: relative;
   width: 100%;
-  text-align: center;
+  max-width: 1100px;
+  height: 180px;
 }
 
-.intro {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(38px, 7vw, 76px);
-  font-weight: 400;
+.title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: baseline;
   white-space: nowrap;
+  font-size: clamp(28px, 5.2vw, 64px);
+  font-weight: 400;
+  letter-spacing: -2px;
 }
 
-.min {
-  font-style: italic;
-  cursor: grab;
+.greeting {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2em;
+  margin-right: 0.18em;
+}
+
+.name {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0;
+}
+
+.letter {
+  position: relative;
   display: inline-block;
-  touch-action: none;
+  font-weight: 700;
+  color: #292820;
+  cursor: grab;
   user-select: none;
+  touch-action: none;
+  z-index: 2;
 }
 
-.min:active {
+.letter:active {
   cursor: grabbing;
 }
 
-.final-title {
-  display: none;
-  align-items: baseline;
-  justify-content: center;
-  gap: 0.12em;
-  white-space: nowrap;
-  font-size: clamp(22px, 4.5vw, 52px);
-  letter-spacing: -1.5px;
-}
-
-.word {
-  display: inline-flex;
-  align-items: baseline;
-}
-
-.initial {
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-size: 1.12em;
-}
-
-.rest {
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 400;
-  overflow: hidden;
+.word-rest {
+  display: inline-block;
   max-width: 0;
   opacity: 0;
-  transition:
-    max-width 0.65s ease,
-    opacity 0.5s ease;
-}
-
-.stage.done .intro {
-  display: none;
-}
-
-.stage.done .final-title {
-  display: flex;
-}
-
-.stage.done .rest {
-  max-width: 250px;
-  opacity: 1;
-}
-
-.stage.done .word:nth-child(2) .rest {
-  transition-delay: .15s;
-}
-
-.stage.done .word:nth-child(3) .rest {
-  transition-delay: .3s;
+  overflow: hidden;
+  font-weight: 400;
+  color: #69665e;
+  transition: none;
 }
 
 .hint {
-  margin-top: 40px;
+  position: absolute;
+  top: calc(50% + 75px);
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 10px;
   letter-spacing: 2px;
   color: #99948a;
+  white-space: nowrap;
   transition: opacity .3s;
 }
 
@@ -154,20 +140,24 @@ footer {
     padding: 24px 5vw;
   }
 
-  .intro {
-    font-size: 42px;
+  .title {
+    font-size: 5.1vw;
+    letter-spacing: -1px;
   }
 
-  .final-title {
-    font-size: clamp(19px, 5vw, 29px);
-    letter-spacing: -1px;
-    gap: 0.08em;
+  .greeting {
+    gap: 0.12em;
+  }
+
+  .hint {
+    top: calc(50% + 55px);
   }
 }
 </style>
 </head>
 
 <body>
+
 <div class="page">
 
 <header>
@@ -178,27 +168,29 @@ footer {
 <main>
   <div class="stage" id="stage">
 
-    <div class="intro">
-      Hi, I'm
-      <span class="min" id="min">Min.</span>
-    </div>
+    <div class="title" id="title">
 
-    <div class="final-title">
-      <span class="word">
-        <span class="initial">M</span><span class="rest">y</span>
+      <span class="greeting" id="greeting">
+        Hi, I'm
       </span>
 
-      <span class="word">
-        <span class="initial">I</span><span class="rest">ndividual</span>
+      <span class="name" id="name">
+
+        <span class="letter" id="M">M</span>
+        <span class="word-rest" id="y">y</span>
+
+        <span class="letter" id="I">i</span>
+        <span class="word-rest" id="individual">ndividual</span>
+
+        <span class="letter" id="N">n</span>
+        <span class="word-rest" id="notebook">otebook.</span>
+
       </span>
 
-      <span class="word">
-        <span class="initial">N</span><span class="rest">otebook.</span>
-      </span>
     </div>
 
     <div class="hint" id="hint">
-      HOLD & SLIDE TO THE RIGHT →
+      HOLD MIN & SLIDE TO THE RIGHT →
     </div>
 
   </div>
@@ -212,49 +204,129 @@ footer {
 </div>
 
 <script>
-const min = document.getElementById('min');
 const stage = document.getElementById('stage');
+const title = document.getElementById('title');
+const greeting = document.getElementById('greeting');
 
-let startX = 0;
+const M = document.getElementById('M');
+const I = document.getElementById('I');
+const N = document.getElementById('N');
+
+const y = document.getElementById('y');
+const individual = document.getElementById('individual');
+const notebook = document.getElementById('notebook');
+
+let progress = 0;
 let dragging = false;
-let currentX = 0;
+let startX = 0;
+let startProgress = 0;
 
-const threshold = 150;
+const maxProgress = 1;
+const dragDistance = 280;
 
-min.addEventListener('pointerdown', (e) => {
-  if (stage.classList.contains('done')) return;
+function smooth(value) {
+  return value * value * (3 - 2 * value);
+}
+
+function render() {
+  const p = smooth(progress);
+
+  // 原始名字逐渐展开成三个单词
+  const spread = p * 1;
+
+  M.style.transform = `translateX(0px)`;
+
+  I.style.transform = `translateX(${spread * 55}px)`;
+  N.style.transform = `translateX(${spread * 130}px)`;
+
+  // 后续文字逐渐显现
+  function reveal(element, amount) {
+    element.style.maxWidth = (element.scrollWidth * amount) + 'px';
+    element.style.opacity = amount;
+  }
+
+  reveal(y, p);
+  reveal(individual, p);
+  reveal(notebook, p);
+
+  // i 和 n 在完成后变为大写
+  I.textContent = progress >= 0.98 ? 'I' : 'i';
+  N.textContent = progress >= 0.98 ? 'N' : 'n';
+
+  greeting.style.opacity = 1 - p;
+
+  stage.classList.toggle('done', progress >= 0.98);
+}
+
+function beginDrag(e, element) {
+  if (progress >= 0.98) return;
 
   dragging = true;
   startX = e.clientX;
-  min.setPointerCapture(e.pointerId);
-});
+  startProgress = progress;
 
-min.addEventListener('pointermove', (e) => {
+  element.setPointerCapture(e.pointerId);
+}
+
+function moveDrag(e) {
   if (!dragging) return;
 
-  currentX = Math.max(0, e.clientX - startX);
-  min.style.transform = `translateX(${currentX}px)`;
+  const distance = e.clientX - startX;
 
-  if (currentX >= threshold) {
-    dragging = false;
-    stage.classList.add('done');
-  }
-});
+  progress = Math.max(
+    0,
+    Math.min(1, startProgress + distance / dragDistance)
+  );
 
-function reset() {
+  render();
+}
+
+function endDrag() {
   if (!dragging) return;
 
   dragging = false;
-  min.style.transition = 'transform .3s ease';
-  min.style.transform = 'translateX(0)';
 
-  setTimeout(() => {
-    min.style.transition = '';
-  }, 300);
+  if (progress >= 0.5) {
+    progress = 1;
+  } else {
+    progress = 0;
+  }
+
+  animateToTarget(progress);
 }
 
-min.addEventListener('pointerup', reset);
-min.addEventListener('pointercancel', reset);
+function animateToTarget(target) {
+  const initial = progress;
+  const startTime = performance.now();
+  const duration = 450;
+
+  function step(now) {
+    const t = Math.min(1, (now - startTime) / duration);
+    const eased = smooth(t);
+
+    progress = initial + (target - initial) * eased;
+    render();
+
+    if (t < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+[M, I, N].forEach(element => {
+  element.addEventListener('pointerdown', e => {
+    beginDrag(e, element);
+  });
+
+  element.addEventListener('pointermove', moveDrag);
+  element.addEventListener('pointerup', endDrag);
+  element.addEventListener('pointercancel', endDrag);
+});
+
+render();
 </script>
+
 </body>
 </html>
