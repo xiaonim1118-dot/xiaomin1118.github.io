@@ -4,237 +4,256 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Xiaomin's personal portfolio.">
-  <title>Xiaomin | Personal Portfolio</title>
+  <title>Min. | Individual Notebook</title>
+  <meta name="description" content="A personal visual archive of photography, travels and thoughts.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: #f7f7f2;
-      color: #242820;
-      font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.6;
+      background: #f1eee6;
+      color: #292820;
+      font-family: 'DM Sans', sans-serif;
+      overflow: hidden;
+      height: 100vh;
     }
-    a { color: inherit; text-decoration: none; }
-    .container { width: min(1100px, 88%); margin: auto; }
+
+    .page {
+      height: 100vh;
+      min-height: 500px;
+      position: relative;
+      padding: 32px 5vw;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header, footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #88847a;
+    }
+
     header {
-      padding: 25px 0;
-      border-bottom: 1px solid #dedfd6;
+      border-bottom: 1px solid #d4d0c7;
+      padding-bottom: 20px;
     }
-    nav { display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-size: 21px; font-weight: 800; letter-spacing: -1px; }
-    .nav-links { display: flex; gap: 25px; font-size: 13px; }
-    .nav-links a:hover { color: #72865c; }
-    .hero { padding: 125px 0 105px; }
-    .eyebrow {
-      color: #78896a; font-size: 12px; letter-spacing: 3px;
-      text-transform: uppercase; margin-bottom: 25px;
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
     }
-    h1 {
-      font-size: clamp(55px, 10vw, 105px);
-      line-height: .98; letter-spacing: -7px;
-      font-weight: 700;
+
+    .stage {
+      position: relative;
+      width: min(850px, 90vw);
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    h1 span { color: #899b76; }
-    .hero-bottom {
-      display: flex; justify-content: space-between;
-      align-items: end; margin-top: 45px; gap: 25px;
+
+    .intro {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      white-space: nowrap;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(38px, 7vw, 76px);
+      font-weight: 400;
     }
-    .intro { max-width: 390px; color: #74776d; font-size: 16px; }
-    .button {
-      display: inline-block; padding: 13px 22px;
-      background: #293326; color: white;
-      border-radius: 30px; font-size: 13px;
-      transition: .25s;
+
+    .min {
+      font-style: italic;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      position: relative;
+      z-index: 3;
+      transition: color .25s;
     }
-    .button:hover { background: #72865c; transform: translateY(-3px); }
-    section { padding: 85px 0; border-top: 1px solid #dedfd6; }
-    .section-label {
-      font-size: 12px; letter-spacing: 2px;
-      color: #899b76; text-transform: uppercase; margin-bottom: 35px;
+
+    .min:active {
+      cursor: grabbing;
     }
-    h2 { font-size: clamp(32px, 5vw, 52px); letter-spacing: -2px; }
-    .about-text {
-      max-width: 680px; margin-top: 25px;
-      color: #73766c; font-size: 18px;
+
+    .reveal {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(35px, 6vw, 68px);
+      white-space: nowrap;
+      transition: opacity .35s ease;
     }
-    .project-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 24px; margin-top: 35px;
+
+    .reveal em {
+      font-weight: 400;
     }
-    .project {
-      background: #eceee5; border-radius: 8px;
-      overflow: hidden; transition: .3s;
+
+    .stage.done .reveal {
+      opacity: 1;
     }
-    .project:hover { transform: translateY(-5px); }
-    .project-art {
-      height: 230px; display: grid; place-items: center;
-      background: #e5e9dc; color: #68765a;
-      font-size: 48px;
+
+    .stage.done .intro {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .4s ease;
     }
-    .project:nth-child(2) .project-art { background: #e9e5dc; color: #8b765c; }
-    .project:nth-child(3) .project-art { background: #e2e7e8; color: #607b83; }
-    .project:nth-child(4) .project-art { background: #e9e2e5; color: #896c7a; }
-    .project-info { padding: 23px; }
-    .project-info h3 { font-size: 19px; margin-bottom: 5px; }
-    .project-info p { color: #77796f; font-size: 13px; }
-    .skills {
-      display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px;
+
+    .hint {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #99948a;
+      white-space: nowrap;
+      transition: opacity .3s;
     }
-    .skill {
-      border: 1px solid #d9dbd1; border-radius: 30px;
-      padding: 10px 19px; font-size: 13px;
+
+    .stage.done .hint {
+      opacity: 0;
     }
-    .contact-box {
-      background: #293326; color: #f7f7f2;
-      padding: 55px; border-radius: 10px; margin-top: 30px;
-    }
-    .contact-box h2 { margin-bottom: 18px; }
-    .contact-box p { color: #c4cabc; margin-bottom: 25px; }
-    .contact-box .button { background: #899b76; }
+
     footer {
-      padding: 30px 0; color: #898b82;
-      font-size: 12px; display: flex;
-      justify-content: space-between; gap: 15px;
+      border-top: 1px solid #d4d0c7;
+      padding-top: 20px;
     }
-    .reveal { opacity: 0; transform: translateY(20px); transition: .7s; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    @media(max-width: 650px) {
-      .nav-links { gap: 12px; font-size: 11px; }
-      .hero { padding: 90px 0 75px; }
-      h1 { letter-spacing: -4px; }
-      .hero-bottom { align-items: start; flex-direction: column; }
-      .project-grid { grid-template-columns: 1fr; }
-      .contact-box { padding: 30px 23px; }
-      footer { flex-direction: column; }
-      section { padding: 65px 0; }
+
+    @media (max-width: 600px) {
+      .page {
+        padding: 24px 6vw;
+      }
+
+      .intro {
+        gap: 8px;
+        font-size: clamp(32px, 8vw, 48px);
+      }
+
+      .reveal {
+        white-space: normal;
+        font-size: 38px;
+        line-height: 1.25;
+      }
+
+      .stage {
+        width: 100%;
+      }
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <nav class="container">
-      <a class="logo" href="#">X.</a>
-      <div class="nav-links">
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#skills">Skills</a>
-        <a href="#contact">Contact</a>
-      </div>
-    </nav>
-  </header>
+  <div class="page">
 
-  <main>
-    <div class="container hero">
-      <p class="eyebrow">PERSONAL PORTFOLIO · 2026</p>
-      <h1>Hello,<br>I'm <span>Xiaomin.</span></h1>
-      <div class="hero-bottom">
-        <p class="intro">
-          Exploring ideas, creating things and collecting experiences.
-          Welcome to my little corner of the internet.
-        </p>
-        <a class="button" href="#projects">Explore my work ↗</a>
-      </div>
-    </div>
+    <header>
+      <span>MIN.</span>
+      <span>PERSONAL ARCHIVE · 2026</span>
+    </header>
 
-    <section id="about">
-      <div class="container">
-        <p class="section-label">01 / ABOUT ME</p>
-        <h2>A little about myself.</h2>
-        <p class="about-text">
-          I'm Xiaomin, a curious person interested in creativity,
-          technology, languages and the world around me.
-          This website is where I collect my projects, ideas
-          and things I'm learning along the way.
-        </p>
-      </div>
-    </section>
+    <main>
+      <div class="stage" id="stage">
 
-    <section id="projects">
-      <div class="container">
-        <p class="section-label">02 / SELECTED WORK</p>
-        <h2>Things I've created.</h2>
-        <div class="project-grid">
-          <article class="project">
-            <div class="project-art">✳</div>
-            <div class="project-info">
-              <h3>Game Development</h3>
-              <p>Interactive worlds & creative experiments</p>
-            </div>
-          </article>
-          <article class="project">
-            <div class="project-art">◉</div>
-            <div class="project-info">
-              <h3>Photography</h3>
-              <p>Places, moments & visual stories</p>
-            </div>
-          </article>
-          <article class="project">
-            <div class="project-art">⌘</div>
-            <div class="project-info">
-              <h3>Digital Projects</h3>
-              <p>Ideas turned into little creations</p>
-            </div>
-          </article>
-          <article class="project">
-            <div class="project-art">✎</div>
-            <div class="project-info">
-              <h3>Learning Journal</h3>
-              <p>Languages, thoughts & discoveries</p>
-            </div>
-          </article>
+        <div class="intro" id="intro">
+          <span>Hi, I'm</span>
+          <span class="min" id="min">Min.</span>
         </div>
-      </div>
-    </section>
 
-    <section id="skills">
-      <div class="container">
-        <p class="section-label">03 / INTERESTS</p>
-        <h2>Always exploring.</h2>
-        <div class="skills">
-          <span class="skill">Creative Thinking</span>
-          <span class="skill">Game Development</span>
-          <span class="skill">Photography</span>
-          <span class="skill">Languages</span>
-          <span class="skill">Technology</span>
-          <span class="skill">Travel</span>
+        <div class="reveal">
+          My Individual<br>
+          <em>Notebook.</em>
         </div>
-      </div>
-    </section>
 
-    <section id="contact">
-      <div class="container">
-        <p class="section-label">04 / GET IN TOUCH</p>
-        <div class="contact-box">
-          <h2>Let's connect.</h2>
-          <p>Have an interesting idea or just want to say hello?</p>
-          <a class="button" href="mailto:YOUR_EMAIL@example.com">
-            Say Hello ↗
-          </a>
+        <div class="hint" id="hint">
+          HOLD & SLIDE TO THE RIGHT →
         </div>
-      </div>
-    </section>
-  </main>
 
-  <footer class="container">
-    <span>© 2026 Xiaomin. All rights reserved.</span>
-    <span>Made with curiosity.</span>
-  </footer>
+      </div>
+    </main>
+
+    <footer>
+      <span>PHOTOGRAPHY · TRAVEL · THOUGHTS</span>
+      <span>001 / INTRODUCTION</span>
+    </footer>
+
+  </div>
 
   <script>
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
+    const min = document.getElementById('min');
+    const stage = document.getElementById('stage');
 
-    document.querySelectorAll('section').forEach(section => {
-      section.classList.add('reveal');
-      observer.observe(section);
+    let startX = 0;
+    let currentX = 0;
+    let dragging = false;
+
+    const threshold = 150;
+
+    min.addEventListener('pointerdown', (e) => {
+      if (stage.classList.contains('done')) return;
+
+      dragging = true;
+      startX = e.clientX;
+      min.setPointerCapture(e.pointerId);
+      min.style.transition = 'none';
+    });
+
+    min.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+
+      currentX = Math.max(0, Math.min(e.clientX - startX, 250));
+
+      min.style.transform = `translateX(${currentX}px)`;
+
+      if (currentX >= threshold) {
+        finish();
+      }
+    });
+
+    function finish() {
+      dragging = false;
+      min.style.transition = 'transform .4s ease, opacity .4s ease';
+      min.style.transform = 'translateX(250px)';
+      min.style.opacity = '0';
+
+      stage.classList.add('done');
+    }
+
+    function reset() {
+      if (stage.classList.contains('done')) return;
+
+      dragging = false;
+      min.style.transition = 'transform .3s ease';
+      min.style.transform = 'translateX(0)';
+    }
+
+    min.addEventListener('pointerup', reset);
+    min.addEventListener('pointercancel', reset);
+    min.addEventListener('lostpointercapture', () => {
+      if (!stage.classList.contains('done')) reset();
     });
   </script>
+
 </body>
 </html>
