@@ -2,331 +2,374 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Min. | My Individual Notebook</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Min. | Personal Notebook</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-body {
-  background: #f1eee6;
-  color: #292820;
-  font-family: 'DM Sans', sans-serif;
-  height: 100vh;
-  overflow: hidden;
-}
+    body {
+      min-height: 100vh;
+      background: #F1EEE6;
+      color: #292820;
+      font-family: "DM Sans", sans-serif;
+      overflow-x: hidden;
+    }
 
-.page {
-  height: 100vh;
-  min-height: 500px;
-  padding: 32px 5vw;
-  display: flex;
-  flex-direction: column;
-}
+    .page {
+      min-height: 100vh;
+      padding: 38px 6%;
+      display: flex;
+      flex-direction: column;
+    }
 
-header, footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: #88847a;
-}
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
 
-header {
-  border-bottom: 1px solid #d4d0c7;
-  padding-bottom: 20px;
-}
+    .logo {
+      font-weight: 700;
+    }
 
-main {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: visible;
-}
+    .header-note {
+      color: #77746B;
+    }
 
-.stage {
-  position: relative;
-  width: 100%;
-  max-width: 1100px;
-  height: 180px;
-}
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 70px 0;
+    }
 
-.title {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: baseline;
-  white-space: nowrap;
-  font-size: clamp(28px, 5.2vw, 64px);
-  font-weight: 400;
-  letter-spacing: -2px;
-}
+    .intro {
+      margin-bottom: 18px;
+      color: #77746B;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+    }
 
-.greeting {
-  display: flex;
-  align-items: baseline;
-  gap: 0.2em;
-  margin-right: 0.18em;
-}
+    .title-line {
+      display: flex;
+      align-items: baseline;
+      white-space: nowrap;
+      width: max-content;
+      max-width: 100%;
+    }
 
-.name {
-  position: relative;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0;
-}
+    .greeting {
+      flex: none;
+      font-size: clamp(34px, 6vw, 76px);
+      font-weight: 400;
+      letter-spacing: -0.065em;
+      transition: opacity 0.35s ease;
+    }
 
-.letter {
-  position: relative;
-  display: inline-block;
-  font-weight: 700;
-  color: #292820;
-  cursor: grab;
-  user-select: none;
-  touch-action: none;
-  z-index: 2;
-}
+    .name-stage {
+      position: relative;
+      flex: none;
+      width: 780px;
+      height: 1.35em;
+      margin-left: 0.22em;
+      font-size: clamp(34px, 6vw, 76px);
+      letter-spacing: -0.065em;
+      cursor: grab;
+      user-select: none;
+      touch-action: pan-y;
+    }
 
-.letter:active {
-  cursor: grabbing;
-}
+    .name-stage:active {
+      cursor: grabbing;
+    }
 
-.word-rest {
-  display: inline-block;
-  max-width: 0;
-  opacity: 0;
-  overflow: hidden;
-  font-weight: 400;
-  color: #69665e;
-  transition: none;
-}
+    .word {
+      position: absolute;
+      top: 0;
+      display: flex;
+      align-items: baseline;
+      white-space: nowrap;
+      will-change: transform;
+    }
 
-.hint {
-  position: absolute;
-  top: calc(50% + 75px);
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: #99948a;
-  white-space: nowrap;
-  transition: opacity .3s;
-}
+    .first-letter {
+      position: relative;
+      display: inline-block;
+      flex: none;
+      font-weight: 700;
+    }
 
-.stage.done .hint {
-  opacity: 0;
-}
+    .lower,
+    .upper {
+      display: block;
+      transition: opacity 0.15s ease;
+    }
 
-footer {
-  border-top: 1px solid #d4d0c7;
-  padding-top: 20px;
-}
+    .upper {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+    }
 
-@media(max-width: 600px) {
-  .page {
-    padding: 24px 5vw;
-  }
+    .rest {
+      display: inline-block;
+      flex: none;
+      overflow: hidden;
+      width: 0;
+      opacity: 0;
+      font-weight: 400;
+      transition: opacity 0.12s linear;
+    }
 
-  .title {
-    font-size: 5.1vw;
-    letter-spacing: -1px;
-  }
+    .hint {
+      margin-top: 32px;
+      color: #8A877E;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      transition: opacity 0.3s ease;
+    }
 
-  .greeting {
-    gap: 0.12em;
-  }
+    .description {
+      margin-top: 100px;
+      max-width: 390px;
+      color: #77746B;
+      font-size: 13px;
+      line-height: 1.9;
+    }
 
-  .hint {
-    top: calc(50% + 55px);
-  }
-}
-</style>
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #8A877E;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+    }
+
+    @media (max-width: 700px) {
+      .page {
+        padding: 26px 6%;
+      }
+
+      header {
+        font-size: 10px;
+      }
+
+      .title-line {
+        transform-origin: left center;
+      }
+
+      .greeting,
+      .name-stage {
+        font-size: clamp(30px, 8vw, 48px);
+      }
+
+      .name-stage {
+        width: 620px;
+      }
+
+      .description {
+        margin-top: 75px;
+      }
+
+      footer {
+        font-size: 9px;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="page">
 
-<div class="page">
+    <header>
+      <div class="logo">MIN. / PERSONAL ARCHIVE</div>
+      <div class="header-note">A collection of moments & thoughts</div>
+    </header>
 
-<header>
-  <span>MIN.</span>
-  <span>PERSONAL ARCHIVE · 2026</span>
-</header>
+    <main>
+      <div class="intro">WELCOME TO MY WORLD</div>
 
-<main>
-  <div class="stage" id="stage">
+      <div class="title-line">
+        <span class="greeting" id="greeting">Hi, I'm</span>
 
-    <div class="title" id="title">
+        <div class="name-stage" id="nameStage">
 
-      <span class="greeting" id="greeting">
-        Hi, I'm
-      </span>
+          <div class="word" id="wordM">
+            <span class="first-letter">M</span>
+            <span class="rest" id="restY">y</span>
+          </div>
 
-      <span class="name" id="name">
+          <div class="word" id="wordI">
+            <span class="first-letter">
+              <span class="lower">i</span>
+              <span class="upper">I</span>
+            </span>
+            <span class="rest" id="restIndividual">ndividual</span>
+          </div>
 
-        <span class="letter" id="M">M</span>
-        <span class="word-rest" id="y">y</span>
+          <div class="word" id="wordN">
+            <span class="first-letter">
+              <span class="lower">n</span>
+              <span class="upper">N</span>
+            </span>
+            <span class="rest" id="restNotebook">otebook.</span>
+          </div>
 
-        <span class="letter" id="I">i</span>
-        <span class="word-rest" id="individual">ndividual</span>
+        </div>
+      </div>
 
-        <span class="letter" id="N">n</span>
-        <span class="word-rest" id="notebook">otebook.</span>
+      <div class="hint" id="hint">
+        HOLD & SLIDE TO THE RIGHT →
+      </div>
 
-      </span>
+      <div class="description">
+        A personal space for photography, travel,
+        observations and little things worth remembering.
+        <br>
+        <br>
+        Here, I collect fragments of the world
+        and pieces of myself.
+      </div>
+    </main>
 
-    </div>
-
-    <div class="hint" id="hint">
-      HOLD MIN & SLIDE TO THE RIGHT →
-    </div>
+    <footer>
+      <span>© 2026 MIN.</span>
+      <span>MADE WITH CURIOSITY</span>
+    </footer>
 
   </div>
-</main>
 
-<footer>
-  <span>PHOTOGRAPHY · TRAVEL · THOUGHTS</span>
-  <span>001 / INTRODUCTION</span>
-</footer>
+  <script>
+    const stage = document.getElementById("nameStage");
+    const greeting = document.getElementById("greeting");
+    const hint = document.getElementById("hint");
 
-</div>
+    const wordM = document.getElementById("wordM");
+    const wordI = document.getElementById("wordI");
+    const wordN = document.getElementById("wordN");
 
-<script>
-const stage = document.getElementById('stage');
-const title = document.getElementById('title');
-const greeting = document.getElementById('greeting');
+    const restY = document.getElementById("restY");
+    const restIndividual = document.getElementById("restIndividual");
+    const restNotebook = document.getElementById("restNotebook");
 
-const M = document.getElementById('M');
-const I = document.getElementById('I');
-const N = document.getElementById('N');
+    const lowerLetters = document.querySelectorAll(".lower");
+    const upperLetters = document.querySelectorAll(".upper");
 
-const y = document.getElementById('y');
-const individual = document.getElementById('individual');
-const notebook = document.getElementById('notebook');
+    let progress = 0;
+    let dragging = false;
+    let startX = 0;
+    let startProgress = 0;
 
-let progress = 0;
-let dragging = false;
-let startX = 0;
-let startProgress = 0;
+    const maxDrag = 300;
+    const gap = 16;
 
-const maxProgress = 1;
-const dragDistance = 280;
+    function measure() {
+      const mWidth = wordM.querySelector(".first-letter").getBoundingClientRect().width;
+      const iWidth = wordI.querySelector(".first-letter").getBoundingClientRect().width;
+      const nWidth = wordN.querySelector(".first-letter").getBoundingClientRect().width;
 
-function smooth(value) {
-  return value * value * (3 - 2 * value);
-}
+      const yWidth = restY.scrollWidth;
+      const individualWidth = restIndividual.scrollWidth;
 
-function render() {
-  const p = smooth(progress);
+      return {
+        startI: mWidth + 2,
+        startN: mWidth + iWidth + 4,
 
-  // 原始名字逐渐展开成三个单词
-  const spread = p * 1;
+        finalI: mWidth + yWidth + gap,
+        finalN: mWidth + yWidth + gap + iWidth + individualWidth + gap,
 
-  M.style.transform = `translateX(0px)`;
-
-  I.style.transform = `translateX(${spread * 55}px)`;
-  N.style.transform = `translateX(${spread * 130}px)`;
-
-  // 后续文字逐渐显现
-  function reveal(element, amount) {
-    element.style.maxWidth = (element.scrollWidth * amount) + 'px';
-    element.style.opacity = amount;
-  }
-
-  reveal(y, p);
-  reveal(individual, p);
-  reveal(notebook, p);
-
-  // i 和 n 在完成后变为大写
-  I.textContent = progress >= 0.98 ? 'I' : 'i';
-  N.textContent = progress >= 0.98 ? 'N' : 'n';
-
-  greeting.style.opacity = 1 - p;
-
-  stage.classList.toggle('done', progress >= 0.98);
-}
-
-function beginDrag(e, element) {
-  if (progress >= 0.98) return;
-
-  dragging = true;
-  startX = e.clientX;
-  startProgress = progress;
-
-  element.setPointerCapture(e.pointerId);
-}
-
-function moveDrag(e) {
-  if (!dragging) return;
-
-  const distance = e.clientX - startX;
-
-  progress = Math.max(
-    0,
-    Math.min(1, startProgress + distance / dragDistance)
-  );
-
-  render();
-}
-
-function endDrag() {
-  if (!dragging) return;
-
-  dragging = false;
-
-  if (progress >= 0.5) {
-    progress = 1;
-  } else {
-    progress = 0;
-  }
-
-  animateToTarget(progress);
-}
-
-function animateToTarget(target) {
-  const initial = progress;
-  const startTime = performance.now();
-  const duration = 450;
-
-  function step(now) {
-    const t = Math.min(1, (now - startTime) / duration);
-    const eased = smooth(t);
-
-    progress = initial + (target - initial) * eased;
-    render();
-
-    if (t < 1) {
-      requestAnimationFrame(step);
+        yWidth,
+        individualWidth,
+        notebookWidth: restNotebook.scrollWidth
+      };
     }
-  }
 
-  requestAnimationFrame(step);
-}
+    function render() {
+      const p = progress;
+      const sizes = measure();
 
-[M, I, N].forEach(element => {
-  element.addEventListener('pointerdown', e => {
-    beginDrag(e, element);
-  });
+      const iPosition = sizes.startI +
+        (sizes.finalI - sizes.startI) * p;
 
-  element.addEventListener('pointermove', moveDrag);
-  element.addEventListener('pointerup', endDrag);
-  element.addEventListener('pointercancel', endDrag);
-});
+      const nPosition = sizes.startN +
+        (sizes.finalN - sizes.startN) * p;
 
-render();
-</script>
+      wordM.style.transform = "translateX(0px)";
+      wordI.style.transform = `translateX(${iPosition}px)`;
+      wordN.style.transform = `translateX(${nPosition}px)`;
 
+      restY.style.width = `${sizes.yWidth * p}px`;
+      restIndividual.style.width = `${sizes.individualWidth * p}px`;
+      restNotebook.style.width = `${sizes.notebookWidth * p}px`;
+
+      restY.style.opacity = p;
+      restIndividual.style.opacity = p;
+      restNotebook.style.opacity = p;
+
+      lowerLetters.forEach(letter => {
+        letter.style.opacity = 1 - p;
+      });
+
+      upperLetters.forEach(letter => {
+        letter.style.opacity = p;
+      });
+
+      greeting.style.opacity = 1 - p;
+
+      hint.style.opacity = p > 0.95 ? 0 : 1;
+      hint.textContent = p > 0.95
+        ? ""
+        : "HOLD & SLIDE TO THE RIGHT →";
+    }
+
+    stage.addEventListener("pointerdown", (event) => {
+      dragging = true;
+      startX = event.clientX;
+      startProgress = progress;
+
+      stage.setPointerCapture(event.pointerId);
+    });
+
+    stage.addEventListener("pointermove", (event) => {
+      if (!dragging) return;
+
+      const distance = event.clientX - startX;
+
+      progress = Math.max(
+        0,
+        Math.min(1, startProgress + distance / maxDrag)
+      );
+
+      render();
+    });
+
+    function stopDragging() {
+      dragging = false;
+    }
+
+    stage.addEventListener("pointerup", stopDragging);
+    stage.addEventListener("pointercancel", stopDragging);
+    stage.addEventListener("lostpointercapture", stopDragging);
+
+    window.addEventListener("resize", render);
+
+    render();
+  </script>
 </body>
 </html>
