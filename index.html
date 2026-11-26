@@ -17,12 +17,20 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       min-height: 100vh;
       background: #F1EEE6;
       color: #292820;
       font-family: "DM Sans", sans-serif;
       overflow-x: hidden;
+    }
+
+    body.lightbox-open {
+      overflow: hidden;
     }
 
     .page {
@@ -64,7 +72,8 @@
       letter-spacing: 0.08em;
     }
 
-    /* 标题整体 */
+    /* 开场标题 */
+
     .title-line {
       display: flex;
       align-items: flex-start;
@@ -74,7 +83,6 @@
       line-height: 1.2;
     }
 
-    /* Hi, I'm */
     .greeting {
       flex: none;
       font-size: clamp(34px, 6vw, 76px);
@@ -84,7 +92,6 @@
       transition: opacity 0.35s ease;
     }
 
-    /* MIN 动画区域 */
     .name-stage {
       position: relative;
       flex: none;
@@ -103,7 +110,6 @@
       cursor: grabbing;
     }
 
-    /* 三个单词分别作为独立组合 */
     .word {
       position: absolute;
       top: 0;
@@ -115,7 +121,6 @@
       will-change: transform;
     }
 
-    /* M / I / N */
     .first-letter {
       position: relative;
       display: inline-block;
@@ -136,7 +141,6 @@
       opacity: 0;
     }
 
-    /* y / ndividual / otebook */
     .rest {
       display: inline-block;
       flex: none;
@@ -165,13 +169,359 @@
       line-height: 1.9;
     }
 
+    /* 作品集区域 */
+
+    .portfolio {
+      max-width: 1400px;
+      width: 100%;
+      margin: 20px auto 100px;
+      padding: 0 6%;
+      opacity: 0;
+      transform: translateY(35px);
+      visibility: hidden;
+      pointer-events: none;
+      transition:
+        opacity 1s ease,
+        transform 1s ease,
+        visibility 1s;
+    }
+
+    .portfolio.visible {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin-bottom: 32px;
+    }
+
+    .section-number {
+      color: #8A877E;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(30px, 4vw, 48px);
+      font-weight: 400;
+      letter-spacing: -0.06em;
+    }
+
+    .section-note {
+      color: #77746B;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+    }
+
+    /* 分类导航 */
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 22px;
+      margin-bottom: 36px;
+      border-bottom: 1px solid #D8D3C8;
+      padding-bottom: 15px;
+    }
+
+    .filter-btn {
+      border: none;
+      background: none;
+      color: #8A877E;
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: color 0.25s ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      color: #292820;
+    }
+
+    .filter-btn.active {
+      font-weight: 700;
+    }
+
+    /* 摄影作品网格 */
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 55px 24px;
+    }
+
+    .photo-card {
+      min-width: 0;
+      cursor: pointer;
+      animation: cardAppear 0.7s ease both;
+    }
+
+    .photo-card:nth-child(even) {
+      margin-top: 75px;
+    }
+
+    .photo-card.hidden {
+      display: none;
+    }
+
+    .photo-frame {
+      position: relative;
+      overflow: hidden;
+      background: #DDD8CE;
+      aspect-ratio: 4 / 5;
+    }
+
+    .photo-card.wide .photo-frame {
+      aspect-ratio: 5 / 3;
+    }
+
+    .photo-frame img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(.2,.7,.2,1);
+    }
+
+    /* 鼠标悬停遮罩 */
+
+    .photo-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      padding: 24px;
+      color: white;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.55),
+        transparent 65%
+      );
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .photo-overlay span {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      transform: translateY(12px);
+      transition: transform 0.4s ease;
+    }
+
+    .photo-overlay strong {
+      margin-top: 7px;
+      font-size: 22px;
+      font-weight: 400;
+      transform: translateY(12px);
+      transition: transform 0.4s ease;
+    }
+
+    .photo-card:hover .photo-frame img {
+      transform: scale(1.06);
+    }
+
+    .photo-card:hover .photo-overlay {
+      opacity: 1;
+    }
+
+    .photo-card:hover .photo-overlay span,
+    .photo-card:hover .photo-overlay strong {
+      transform: translateY(0);
+    }
+
+    .photo-info {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 13px;
+      color: #77746B;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+    }
+
+    .photo-info strong {
+      color: #292820;
+      font-weight: 500;
+    }
+
+    /* 关于页面 */
+
+    .about {
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto 100px;
+      padding: 60px 6% 0;
+      border-top: 1px solid #D8D3C8;
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .about h2 {
+      font-size: 32px;
+      font-weight: 400;
+      letter-spacing: -0.05em;
+    }
+
+    .about p {
+      max-width: 400px;
+      color: #77746B;
+      font-size: 13px;
+      line-height: 2;
+    }
+
+    /* 全屏图片浏览器 */
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 65px 80px;
+      background: rgba(20, 20, 18, 0.97);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+
+    .lightbox.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-image-wrap {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox-image {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .lightbox-image.loaded {
+      opacity: 1;
+    }
+
+    .lightbox-caption {
+      width: 100%;
+      max-width: 850px;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      padding-top: 24px;
+      color: white;
+    }
+
+    .lightbox-caption h3 {
+      font-size: 19px;
+      font-weight: 400;
+      margin-bottom: 6px;
+    }
+
+    .lightbox-caption p {
+      color: #AAA9A2;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+    }
+
+    .lightbox-count {
+      color: #AAA9A2;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+    }
+
+    .lightbox-close,
+    .lightbox-prev,
+    .lightbox-next {
+      position: absolute;
+      border: none;
+      background: transparent;
+      color: white;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.2s ease;
+    }
+
+    .lightbox-close:hover,
+    .lightbox-prev:hover,
+    .lightbox-next:hover {
+      opacity: 0.55;
+    }
+
+    .lightbox-close {
+      top: 25px;
+      right: 35px;
+      font-size: 28px;
+      font-weight: 300;
+    }
+
+    .lightbox-prev,
+    .lightbox-next {
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 32px;
+      font-weight: 300;
+      padding: 15px;
+    }
+
+    .lightbox-prev {
+      left: 18px;
+    }
+
+    .lightbox-next {
+      right: 18px;
+    }
+
     footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 25px 6%;
       color: #8A877E;
       font-size: 11px;
       letter-spacing: 0.08em;
+    }
+
+    @keyframes cardAppear {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @media (max-width: 700px) {
@@ -196,14 +546,77 @@
         margin-top: 75px;
       }
 
+      .portfolio {
+        padding: 0 6%;
+      }
+
+      .section-heading {
+        align-items: start;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .gallery {
+        grid-template-columns: 1fr;
+        gap: 35px;
+      }
+
+      .photo-card:nth-child(even) {
+        margin-top: 0;
+      }
+
+      .photo-overlay {
+        opacity: 1;
+      }
+
+      .photo-overlay span,
+      .photo-overlay strong {
+        transform: translateY(0);
+      }
+
+      .about {
+        flex-direction: column;
+        padding: 40px 6% 0;
+      }
+
+      .lightbox {
+        padding: 55px 20px 30px;
+      }
+
+      .lightbox-prev {
+        left: 0;
+      }
+
+      .lightbox-next {
+        right: 0;
+      }
+
+      .lightbox-close {
+        top: 15px;
+        right: 20px;
+      }
+
+      .lightbox-caption h3 {
+        font-size: 15px;
+      }
+
       footer {
         font-size: 9px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
       }
     }
   </style>
 </head>
 
 <body>
+
   <div class="page">
 
     <header>
@@ -215,7 +628,6 @@
       <div class="intro">WELCOME TO MY WORLD</div>
 
       <div class="title-line">
-
         <span class="greeting" id="greeting">Hi, I'm</span>
 
         <div class="name-stage" id="nameStage">
@@ -256,15 +668,200 @@
         and pieces of myself.
       </div>
     </main>
+  </div>
 
-    <footer>
-      <span>© 2026 MIN.</span>
-      <span>MADE WITH CURIOSITY</span>
-    </footer>
+  <!-- 作品集 -->
+
+  <section class="portfolio" id="portfolio">
+
+    <div class="section-heading">
+      <div>
+        <div class="section-number">01 / SELECTED WORKS</div>
+        <h2 class="section-title">A visual collection.</h2>
+      </div>
+      <div class="section-note">PHOTOGRAPHY · 2024 — 2026</div>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">ALL</button>
+      <button class="filter-btn" data-filter="nature">NATURE</button>
+      <button class="filter-btn" data-filter="travel">TRAVEL</button>
+      <button class="filter-btn" data-filter="architecture">ARCHITECTURE</button>
+      <button class="filter-btn" data-filter="daily">DAILY LIFE</button>
+    </div>
+
+    <div class="gallery" id="gallery">
+
+      <article class="photo-card wide"
+        data-category="nature"
+        data-title="Into the Mountains"
+        data-location="XIZANG, CHINA"
+        data-year="2026"
+        data-image="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1800">
+        <div class="photo-frame">
+          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1000"
+               alt="Mountain landscape" loading="lazy">
+          <div class="photo-overlay">
+            <span>XIZANG · 2026</span>
+            <strong>Into the Mountains</strong>
+          </div>
+        </div>
+        <div class="photo-info">
+          <strong>Into the Mountains</strong>
+          <span>NATURE / 01</span>
+        </div>
+      </article>
+
+      <article class="photo-card"
+        data-category="travel"
+        data-title="A Quiet Journey"
+        data-location="JAPAN"
+        data-year="2026"
+        data-image="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1800">
+        <div class="photo-frame">
+          <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1000"
+               alt="Japanese traditional street" loading="lazy">
+          <div class="photo-overlay">
+            <span>JAPAN · 2026</span>
+            <strong>A Quiet Journey</strong>
+          </div>
+        </div>
+        <div class="photo-info">
+          <strong>A Quiet Journey</strong>
+          <span>TRAVEL / 02</span>
+        </div>
+      </article>
+
+      <article class="photo-card"
+        data-category="architecture"
+        data-title="Lines and Silence"
+        data-location="EUROPE"
+        data-year="2025"
+        data-image="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=1800">
+        <div class="photo-frame">
+          <img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=1000"
+               alt="Modern architecture" loading="lazy">
+          <div class="photo-overlay">
+            <span>ARCHITECTURE · 2025</span>
+            <strong>Lines and Silence</strong>
+          </div>
+        </div>
+        <div class="photo-info">
+          <strong>Lines and Silence</strong>
+          <span>SPACE / 03</span>
+        </div>
+      </article>
+
+      <article class="photo-card wide"
+        data-category="nature"
+        data-title="Somewhere in the Wild"
+        data-location="THE MOUNTAINS"
+        data-year="2025"
+        data-image="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=1800">
+        <div class="photo-frame">
+          <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=1000"
+               alt="Lake and mountains" loading="lazy">
+          <div class="photo-overlay">
+            <span>NATURE · 2025</span>
+            <strong>Somewhere in the Wild</strong>
+          </div>
+        </div>
+        <div class="photo-info">
+          <strong>Somewhere in the Wild</strong>
+          <span>NATURE / 04</span>
+        </div>
+      </article>
+
+      <article class="photo-card"
+        data-category="daily"
+        data-title="Little Moments"
+        data-location="EVERYDAY LIFE"
+        data-year="2025"
+        data-image="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1800">
+        <div class="photo-frame">
+          <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1000"
+               alt="Everyday life" loading="lazy">
+          <div class="photo-overlay">
+            <span>DAILY LIFE · 2025</span>
+            <strong>Little Moments</strong>
+          </div>
+        </div>
+        <div class="photo-info">
+          <strong>Little Moments</strong>
+          <span>DAILY / 05</span>
+        </div>
+      </article>
+
+      <article class="photo-card"
+        data-category="travel"
+        data-title="The Other Side"
+        data-location="A PLACE TO REMEMBER"
+        data-year="2024"
+        data-image="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1800">
+        <div class="photo-frame">
+          <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1000"
+               alt="Travel landscape" loading="lazy">
+          <div class="photo-overlay">
+            <span>TRAVEL · 2024</span>
+            <strong>The Other Side</strong>
+          </div>
+        </div>
+        <div class="photo-info">
+          <strong>The Other Side</strong>
+          <span>TRAVEL / 06</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- 关于我 -->
+
+  <section class="about">
+    <h2>A little about me.</h2>
+    <p>
+      A curious person collecting places, images,
+      languages and stories.
+      <br><br>
+      This is my little corner of the internet.
+      A place to keep the things I don't want to forget.
+    </p>
+  </section>
+
+  <footer>
+    <span>© 2026 MIN.</span>
+    <span>MADE WITH CURIOSITY</span>
+  </footer>
+
+  <!-- 全屏图片浏览器 -->
+
+  <div class="lightbox" id="lightbox">
+
+    <button class="lightbox-close" id="closeLightbox" aria-label="Close">×</button>
+    <button class="lightbox-prev" id="prevPhoto" aria-label="Previous">‹</button>
+    <button class="lightbox-next" id="nextPhoto" aria-label="Next">›</button>
+
+    <div class="lightbox-content">
+      <div class="lightbox-image-wrap">
+        <img class="lightbox-image" id="lightboxImage" src="" alt="">
+      </div>
+
+      <div class="lightbox-caption">
+        <div>
+          <h3 id="lightboxTitle"></h3>
+          <p id="lightboxLocation"></p>
+        </div>
+        <div class="lightbox-count" id="lightboxCount"></div>
+      </div>
+    </div>
 
   </div>
 
   <script>
+    /* =========================
+       开场动画
+    ========================= */
+
     const stage = document.getElementById("nameStage");
     const greeting = document.getElementById("greeting");
     const hint = document.getElementById("hint");
@@ -280,29 +877,21 @@
     const lowerLetters = document.querySelectorAll(".lower");
     const upperLetters = document.querySelectorAll(".upper");
 
+    const portfolio = document.getElementById("portfolio");
+
     let progress = 0;
     let dragging = false;
     let startX = 0;
     let startProgress = 0;
 
-    /* =========================
-       可自行调整的参数
-    ========================= */
-
+    // 可调整的动画参数
     const maxDrag = 300;
-
-    // 最终三个单词之间的距离
     const gap = 24;
-
-    // 初始 Min. 中字母之间的距离
     const initialGap = 1;
-
-    /* ========================= */
 
     function measure() {
       const mWidth = wordM.querySelector(".first-letter").getBoundingClientRect().width;
       const iWidth = wordI.querySelector(".first-letter").getBoundingClientRect().width;
-      const nWidth = wordN.querySelector(".first-letter").getBoundingClientRect().width;
 
       const yWidth = restY.scrollWidth;
       const individualWidth = restIndividual.scrollWidth;
@@ -310,11 +899,9 @@
 
       return {
         startI: mWidth + initialGap,
-
         startN: mWidth + initialGap + iWidth + initialGap,
 
         finalI: mWidth + yWidth + gap,
-
         finalN: mWidth + yWidth + gap +
                 iWidth + individualWidth + gap,
 
@@ -334,12 +921,10 @@
       const nPosition =
         sizes.startN + (sizes.finalN - sizes.startN) * p;
 
-      // 移动三个单词组合
       wordM.style.transform = "translateX(0px)";
       wordI.style.transform = `translateX(${iPosition}px)`;
       wordN.style.transform = `translateX(${nPosition}px)`;
 
-      // 逐渐展开每个单词的后缀
       restY.style.width = `${sizes.yWidth * p}px`;
       restIndividual.style.width = `${sizes.individualWidth * p}px`;
       restNotebook.style.width = `${sizes.notebookWidth * p}px`;
@@ -348,7 +933,6 @@
       restIndividual.style.opacity = p;
       restNotebook.style.opacity = p;
 
-      // i / n 逐渐变成 I / N
       lowerLetters.forEach(letter => {
         letter.style.opacity = 1 - p;
       });
@@ -357,23 +941,24 @@
         letter.style.opacity = p;
       });
 
-      // Hi, I'm 逐渐淡出
       greeting.style.opacity = 1 - p;
-
-      // 提示文字
       hint.style.opacity = p > 0.95 ? 0 : 1;
+
+      // 动画完成后显示作品集
+      if (p >= 0.99) {
+        portfolio.classList.add("visible");
+      } else {
+        portfolio.classList.remove("visible");
+      }
     }
 
-    // 鼠标或触屏按下
     stage.addEventListener("pointerdown", (event) => {
       dragging = true;
       startX = event.clientX;
       startProgress = progress;
-
       stage.setPointerCapture(event.pointerId);
     });
 
-    // 向右拖动
     stage.addEventListener("pointermove", (event) => {
       if (!dragging) return;
 
@@ -398,6 +983,143 @@
     window.addEventListener("resize", render);
 
     render();
+
+
+    /* =========================
+       作品分类筛选
+    ========================= */
+
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const photoCards = document.querySelectorAll(".photo-card");
+
+    filterButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        filterButtons.forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+
+        const filter = button.dataset.filter;
+
+        photoCards.forEach(card => {
+          const matched =
+            filter === "all" || card.dataset.category === filter;
+
+          card.classList.toggle("hidden", !matched);
+        });
+      });
+    });
+
+
+    /* =========================
+       沉浸式图片浏览
+    ========================= */
+
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImage = document.getElementById("lightboxImage");
+    const lightboxTitle = document.getElementById("lightboxTitle");
+    const lightboxLocation = document.getElementById("lightboxLocation");
+    const lightboxCount = document.getElementById("lightboxCount");
+
+    const closeButton = document.getElementById("closeLightbox");
+    const prevButton = document.getElementById("prevPhoto");
+    const nextButton = document.getElementById("nextPhoto");
+
+    let currentIndex = 0;
+    let activeCards = [];
+
+    function getVisibleCards() {
+      return Array.from(photoCards).filter(card => !card.classList.contains("hidden"));
+    }
+
+    function showPhoto(index) {
+      activeCards = getVisibleCards();
+
+      if (!activeCards.length) return;
+
+      currentIndex = (index + activeCards.length) % activeCards.length;
+
+      const card = activeCards[currentIndex];
+
+      lightboxImage.classList.remove("loaded");
+
+      lightboxImage.src = card.dataset.image;
+      lightboxImage.alt = card.dataset.title;
+
+      lightboxTitle.textContent = card.dataset.title;
+      lightboxLocation.textContent =
+        card.dataset.location + " · " + card.dataset.year;
+
+      lightboxCount.textContent =
+        String(currentIndex + 1).padStart(2, "0") +
+        " / " +
+        String(activeCards.length).padStart(2, "0");
+
+      lightboxImage.onload = () => {
+        lightboxImage.classList.add("loaded");
+      };
+
+      if (lightboxImage.complete && lightboxImage.naturalWidth > 0) {
+        lightboxImage.classList.add("loaded");
+      }
+    }
+
+    function openLightbox(card) {
+      activeCards = getVisibleCards();
+      currentIndex = activeCards.indexOf(card);
+
+      if (currentIndex < 0) return;
+
+      showPhoto(currentIndex);
+
+      lightbox.classList.add("open");
+      document.body.classList.add("lightbox-open");
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove("open");
+      document.body.classList.remove("lightbox-open");
+    }
+
+    photoCards.forEach(card => {
+      card.addEventListener("click", () => {
+        openLightbox(card);
+      });
+    });
+
+    closeButton.addEventListener("click", closeLightbox);
+
+    prevButton.addEventListener("click", () => {
+      showPhoto(currentIndex - 1);
+    });
+
+    nextButton.addEventListener("click", () => {
+      showPhoto(currentIndex + 1);
+    });
+
+    // 点击黑色背景关闭
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
+    });
+
+    // 键盘操作
+    document.addEventListener("keydown", (event) => {
+      if (!lightbox.classList.contains("open")) return;
+
+      if (event.key === "Escape") {
+        closeLightbox();
+      }
+
+      if (event.key === "ArrowLeft") {
+        showPhoto(currentIndex - 1);
+      }
+
+      if (event.key === "ArrowRight") {
+        showPhoto(currentIndex + 1);
+      }
+    });
+
   </script>
+
 </body>
 </html>
