@@ -2,258 +2,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Min. | Individual Notebook</title>
-  <meta name="description" content="A personal visual archive of photography, travels and thoughts.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Min. | Individual Notebook</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    body {
-      background: #f1eee6;
-      color: #292820;
-      font-family: 'DM Sans', sans-serif;
-      overflow: hidden;
-      height: 100vh;
-    }
+body {
+  background: #f1eee6;
+  color: #292820;
+  font-family: 'DM Sans', sans-serif;
+  overflow: hidden;
+  height: 100vh;
+}
 
-    .page {
-      height: 100vh;
-      min-height: 500px;
-      position: relative;
-      padding: 32px 5vw;
-      display: flex;
-      flex-direction: column;
-    }
+.page {
+  height: 100vh;
+  min-height: 500px;
+  padding: 32px 5vw;
+  display: flex;
+  flex-direction: column;
+}
 
-    header, footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: #88847a;
-    }
+header, footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #88847a;
+}
 
-    header {
-      border-bottom: 1px solid #d4d0c7;
-      padding-bottom: 20px;
-    }
+header {
+  border-bottom: 1px solid #d4d0c7;
+  padding-bottom: 20px;
+}
 
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-    .stage {
-      position: relative;
-      width: min(850px, 90vw);
-      height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+.stage {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
 
-    .intro {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      white-space: nowrap;
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(38px, 7vw, 76px);
-      font-weight: 400;
-    }
+.intro {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(38px, 7vw, 76px);
+  font-weight: 400;
+  white-space: nowrap;
+}
 
-    .min {
-      font-style: italic;
-      cursor: grab;
-      touch-action: none;
-      user-select: none;
-      position: relative;
-      z-index: 3;
-      transition: color .25s;
-    }
+.min {
+  font-style: italic;
+  cursor: grab;
+  display: inline-block;
+  touch-action: none;
+  user-select: none;
+}
 
-    .min:active {
-      cursor: grabbing;
-    }
+.min:active {
+  cursor: grabbing;
+}
 
-    .reveal {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%;
-      text-align: center;
-      opacity: 0;
-      pointer-events: none;
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(35px, 6vw, 68px);
-      white-space: nowrap;
-      transition: opacity .35s ease;
-    }
+.final-title {
+  display: none;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.12em;
+  white-space: nowrap;
+  font-size: clamp(22px, 4.5vw, 52px);
+  letter-spacing: -1.5px;
+}
 
-    .reveal em {
-      font-weight: 400;
-    }
+.word {
+  display: inline-flex;
+  align-items: baseline;
+}
 
-    .stage.done .reveal {
-      opacity: 1;
-    }
+.initial {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.12em;
+}
 
-    .stage.done .intro {
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .4s ease;
-    }
+.rest {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  overflow: hidden;
+  max-width: 0;
+  opacity: 0;
+  transition:
+    max-width 0.65s ease,
+    opacity 0.5s ease;
+}
 
-    .hint {
-      position: absolute;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: #99948a;
-      white-space: nowrap;
-      transition: opacity .3s;
-    }
+.stage.done .intro {
+  display: none;
+}
 
-    .stage.done .hint {
-      opacity: 0;
-    }
+.stage.done .final-title {
+  display: flex;
+}
 
-    footer {
-      border-top: 1px solid #d4d0c7;
-      padding-top: 20px;
-    }
+.stage.done .rest {
+  max-width: 250px;
+  opacity: 1;
+}
 
-    @media (max-width: 600px) {
-      .page {
-        padding: 24px 6vw;
-      }
+.stage.done .word:nth-child(2) .rest {
+  transition-delay: .15s;
+}
 
-      .intro {
-        gap: 8px;
-        font-size: clamp(32px, 8vw, 48px);
-      }
+.stage.done .word:nth-child(3) .rest {
+  transition-delay: .3s;
+}
 
-      .reveal {
-        white-space: normal;
-        font-size: 38px;
-        line-height: 1.25;
-      }
+.hint {
+  margin-top: 40px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #99948a;
+  transition: opacity .3s;
+}
 
-      .stage {
-        width: 100%;
-      }
-    }
-  </style>
+.stage.done .hint {
+  opacity: 0;
+}
+
+footer {
+  border-top: 1px solid #d4d0c7;
+  padding-top: 20px;
+}
+
+@media(max-width: 600px) {
+  .page {
+    padding: 24px 5vw;
+  }
+
+  .intro {
+    font-size: 42px;
+  }
+
+  .final-title {
+    font-size: clamp(19px, 5vw, 29px);
+    letter-spacing: -1px;
+    gap: 0.08em;
+  }
+}
+</style>
 </head>
 
 <body>
-  <div class="page">
+<div class="page">
 
-    <header>
-      <span>MIN.</span>
-      <span>PERSONAL ARCHIVE · 2026</span>
-    </header>
+<header>
+  <span>MIN.</span>
+  <span>PERSONAL ARCHIVE · 2026</span>
+</header>
 
-    <main>
-      <div class="stage" id="stage">
+<main>
+  <div class="stage" id="stage">
 
-        <div class="intro" id="intro">
-          <span>Hi, I'm</span>
-          <span class="min" id="min">Min.</span>
-        </div>
+    <div class="intro">
+      Hi, I'm
+      <span class="min" id="min">Min.</span>
+    </div>
 
-        <div class="reveal">
-          My Individual<br>
-          <em>Notebook.</em>
-        </div>
+    <div class="final-title">
+      <span class="word">
+        <span class="initial">M</span><span class="rest">y</span>
+      </span>
 
-        <div class="hint" id="hint">
-          HOLD & SLIDE TO THE RIGHT →
-        </div>
+      <span class="word">
+        <span class="initial">I</span><span class="rest">ndividual</span>
+      </span>
 
-      </div>
-    </main>
+      <span class="word">
+        <span class="initial">N</span><span class="rest">otebook.</span>
+      </span>
+    </div>
 
-    <footer>
-      <span>PHOTOGRAPHY · TRAVEL · THOUGHTS</span>
-      <span>001 / INTRODUCTION</span>
-    </footer>
+    <div class="hint" id="hint">
+      HOLD & SLIDE TO THE RIGHT →
+    </div>
 
   </div>
+</main>
 
-  <script>
-    const min = document.getElementById('min');
-    const stage = document.getElementById('stage');
+<footer>
+  <span>PHOTOGRAPHY · TRAVEL · THOUGHTS</span>
+  <span>001 / INTRODUCTION</span>
+</footer>
 
-    let startX = 0;
-    let currentX = 0;
-    let dragging = false;
+</div>
 
-    const threshold = 150;
+<script>
+const min = document.getElementById('min');
+const stage = document.getElementById('stage');
 
-    min.addEventListener('pointerdown', (e) => {
-      if (stage.classList.contains('done')) return;
+let startX = 0;
+let dragging = false;
+let currentX = 0;
 
-      dragging = true;
-      startX = e.clientX;
-      min.setPointerCapture(e.pointerId);
-      min.style.transition = 'none';
-    });
+const threshold = 150;
 
-    min.addEventListener('pointermove', (e) => {
-      if (!dragging) return;
+min.addEventListener('pointerdown', (e) => {
+  if (stage.classList.contains('done')) return;
 
-      currentX = Math.max(0, Math.min(e.clientX - startX, 250));
+  dragging = true;
+  startX = e.clientX;
+  min.setPointerCapture(e.pointerId);
+});
 
-      min.style.transform = `translateX(${currentX}px)`;
+min.addEventListener('pointermove', (e) => {
+  if (!dragging) return;
 
-      if (currentX >= threshold) {
-        finish();
-      }
-    });
+  currentX = Math.max(0, e.clientX - startX);
+  min.style.transform = `translateX(${currentX}px)`;
 
-    function finish() {
-      dragging = false;
-      min.style.transition = 'transform .4s ease, opacity .4s ease';
-      min.style.transform = 'translateX(250px)';
-      min.style.opacity = '0';
+  if (currentX >= threshold) {
+    dragging = false;
+    stage.classList.add('done');
+  }
+});
 
-      stage.classList.add('done');
-    }
+function reset() {
+  if (!dragging) return;
 
-    function reset() {
-      if (stage.classList.contains('done')) return;
+  dragging = false;
+  min.style.transition = 'transform .3s ease';
+  min.style.transform = 'translateX(0)';
 
-      dragging = false;
-      min.style.transition = 'transform .3s ease';
-      min.style.transform = 'translateX(0)';
-    }
+  setTimeout(() => {
+    min.style.transition = '';
+  }, 300);
+}
 
-    min.addEventListener('pointerup', reset);
-    min.addEventListener('pointercancel', reset);
-    min.addEventListener('lostpointercapture', () => {
-      if (!stage.classList.contains('done')) reset();
-    });
-  </script>
-
+min.addEventListener('pointerup', reset);
+min.addEventListener('pointercancel', reset);
+</script>
 </body>
 </html>
