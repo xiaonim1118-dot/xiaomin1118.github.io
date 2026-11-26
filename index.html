@@ -64,30 +64,36 @@
       letter-spacing: 0.08em;
     }
 
+    /* 标题整体 */
     .title-line {
       display: flex;
-      align-items: baseline;
+      align-items: flex-start;
       white-space: nowrap;
       width: max-content;
       max-width: 100%;
+      line-height: 1.2;
     }
 
+    /* Hi, I'm */
     .greeting {
       flex: none;
       font-size: clamp(34px, 6vw, 76px);
       font-weight: 400;
       letter-spacing: -0.065em;
+      line-height: 1.2;
       transition: opacity 0.35s ease;
     }
 
+    /* MIN 动画区域 */
     .name-stage {
       position: relative;
       flex: none;
       width: 780px;
-      height: 1.35em;
+      height: 1.2em;
       margin-left: 0.22em;
       font-size: clamp(34px, 6vw, 76px);
       letter-spacing: -0.065em;
+      line-height: 1.2;
       cursor: grab;
       user-select: none;
       touch-action: pan-y;
@@ -97,20 +103,25 @@
       cursor: grabbing;
     }
 
+    /* 三个单词分别作为独立组合 */
     .word {
       position: absolute;
       top: 0;
+      left: 0;
       display: flex;
       align-items: baseline;
       white-space: nowrap;
+      line-height: 1.2;
       will-change: transform;
     }
 
+    /* M / I / N */
     .first-letter {
       position: relative;
       display: inline-block;
       flex: none;
       font-weight: 700;
+      line-height: 1.2;
     }
 
     .lower,
@@ -125,6 +136,7 @@
       opacity: 0;
     }
 
+    /* y / ndividual / otebook */
     .rest {
       display: inline-block;
       flex: none;
@@ -132,6 +144,7 @@
       width: 0;
       opacity: 0;
       font-weight: 400;
+      line-height: 1.2;
       transition: opacity 0.12s linear;
     }
 
@@ -170,10 +183,6 @@
         font-size: 10px;
       }
 
-      .title-line {
-        transform-origin: left center;
-      }
-
       .greeting,
       .name-stage {
         font-size: clamp(30px, 8vw, 48px);
@@ -206,6 +215,7 @@
       <div class="intro">WELCOME TO MY WORLD</div>
 
       <div class="title-line">
+
         <span class="greeting" id="greeting">Hi, I'm</span>
 
         <div class="name-stage" id="nameStage">
@@ -241,8 +251,7 @@
       <div class="description">
         A personal space for photography, travel,
         observations and little things worth remembering.
-        <br>
-        <br>
+        <br><br>
         Here, I collect fragments of the world
         and pieces of myself.
       </div>
@@ -276,8 +285,19 @@
     let startX = 0;
     let startProgress = 0;
 
+    /* =========================
+       可自行调整的参数
+    ========================= */
+
     const maxDrag = 300;
-    const gap = 20;
+
+    // 最终三个单词之间的距离
+    const gap = 24;
+
+    // 初始 Min. 中字母之间的距离
+    const initialGap = 1;
+
+    /* ========================= */
 
     function measure() {
       const mWidth = wordM.querySelector(".first-letter").getBoundingClientRect().width;
@@ -286,17 +306,21 @@
 
       const yWidth = restY.scrollWidth;
       const individualWidth = restIndividual.scrollWidth;
+      const notebookWidth = restNotebook.scrollWidth;
 
       return {
-        startI: mWidth + 2,
-        startN: mWidth + iWidth + 4,
+        startI: mWidth + initialGap,
+
+        startN: mWidth + initialGap + iWidth + initialGap,
 
         finalI: mWidth + yWidth + gap,
-        finalN: mWidth + yWidth + gap + iWidth + individualWidth + gap,
+
+        finalN: mWidth + yWidth + gap +
+                iWidth + individualWidth + gap,
 
         yWidth,
         individualWidth,
-        notebookWidth: restNotebook.scrollWidth
+        notebookWidth
       };
     }
 
@@ -304,16 +328,18 @@
       const p = progress;
       const sizes = measure();
 
-      const iPosition = sizes.startI +
-        (sizes.finalI - sizes.startI) * p;
+      const iPosition =
+        sizes.startI + (sizes.finalI - sizes.startI) * p;
 
-      const nPosition = sizes.startN +
-        (sizes.finalN - sizes.startN) * p;
+      const nPosition =
+        sizes.startN + (sizes.finalN - sizes.startN) * p;
 
+      // 移动三个单词组合
       wordM.style.transform = "translateX(0px)";
       wordI.style.transform = `translateX(${iPosition}px)`;
       wordN.style.transform = `translateX(${nPosition}px)`;
 
+      // 逐渐展开每个单词的后缀
       restY.style.width = `${sizes.yWidth * p}px`;
       restIndividual.style.width = `${sizes.individualWidth * p}px`;
       restNotebook.style.width = `${sizes.notebookWidth * p}px`;
@@ -322,6 +348,7 @@
       restIndividual.style.opacity = p;
       restNotebook.style.opacity = p;
 
+      // i / n 逐渐变成 I / N
       lowerLetters.forEach(letter => {
         letter.style.opacity = 1 - p;
       });
@@ -330,14 +357,14 @@
         letter.style.opacity = p;
       });
 
+      // Hi, I'm 逐渐淡出
       greeting.style.opacity = 1 - p;
 
+      // 提示文字
       hint.style.opacity = p > 0.95 ? 0 : 1;
-      hint.textContent = p > 0.95
-        ? ""
-        : "HOLD & SLIDE TO THE RIGHT →";
     }
 
+    // 鼠标或触屏按下
     stage.addEventListener("pointerdown", (event) => {
       dragging = true;
       startX = event.clientX;
@@ -346,6 +373,7 @@
       stage.setPointerCapture(event.pointerId);
     });
 
+    // 向右拖动
     stage.addEventListener("pointermove", (event) => {
       if (!dragging) return;
 
