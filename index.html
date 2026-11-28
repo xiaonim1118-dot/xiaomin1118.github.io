@@ -651,16 +651,16 @@ footer{
   padding:10vh 7vw 12vh;
 }
 .magazine-grid{
-  display:grid;
-  grid-template-columns:repeat(12,minmax(0,1fr));
-  grid-auto-rows:clamp(38px,5vw,68px);
+  display:flex;flex-wrap:wrap;
   gap:clamp(12px,2vw,28px);
-  align-items:start;
+  align-items:flex-start;
 }
 .magazine-item{
   position:relative;display:block;overflow:hidden;
-  width:100%;height:100%;
-  border:0;padding:0;background:#DED9CF;
+  flex:0 0 auto;
+  contain:layout paint;
+  content-visibility:auto;
+  border:0;padding:0;background:transparent;
   cursor:zoom-in;text-align:left;
   opacity:0;transform:translateY(30px) scale(.985);
   animation:magazineReveal .9s var(--ease) forwards;
@@ -675,13 +675,13 @@ footer{
 }
 .magazine-item img{
   display:block;width:100%;height:100%;
-  object-fit:cover;
-  transition:transform 1.2s var(--ease),filter .8s var(--ease);
+  /* 画框尺寸已按原图比例算出，contain 保证任何像素都不被裁掉 */
+  object-fit:contain;
+  background:transparent;
+  transition:filter .8s var(--ease);
 }
-/* 地区图集统一色感，国家图集维持原样 */
-.gallery-modal.is-region .magazine-item img{
-  filter:saturate(.88) contrast(.97) brightness(1.01);
-}
+/* 地区图集不再叠加滤镜：少一层合成，颜色也更接近原片 */
+
 .magazine-item::after{
   content:"";position:absolute;inset:0;
   background:linear-gradient(
@@ -691,11 +691,11 @@ footer{
 }
 .magazine-item:hover img,
 .magazine-item:focus-visible img{
-  transform:scale(1.045);filter:saturate(1.08);
+  filter:saturate(1.08) brightness(1.02);
 }
 .gallery-modal.is-region .magazine-item:hover img,
 .gallery-modal.is-region .magazine-item:focus-visible img{
-  transform:scale(1.045);filter:saturate(1.02) contrast(1) brightness(1.02);
+  filter:saturate(1.02) contrast(1) brightness(1.02);
 }
 .magazine-item:hover::after,
 .magazine-item.is-touched::after,
@@ -717,7 +717,6 @@ footer{
 }
 
 /* 不规则杂志构图：由脚本按栏宽节奏逐段生成（见 layoutMagazine） */
-.magazine-grid{grid-auto-flow:row}
 .magazine-item{margin:0}
 .magazine-item:nth-child(n){
   opacity:0;transform:translateY(28px) scale(.99);
@@ -726,8 +725,8 @@ footer{
 }
 
 /* 带转场进入时，容器不做整体淡入，避免与转场互相冲淡 */
-.gallery-modal.fx-ink,
-.gallery-modal.fx-ripple,
+.gallery-modal.fx-scroll,
+.gallery-modal.fx-lattice,
 .gallery-modal.fx-depth,
 .gallery-modal.fx-slice{
   transition:opacity .12s linear,visibility 0s;
@@ -745,98 +744,71 @@ footer{
 }
 @keyframes veilFade{0%{opacity:1}100%{opacity:0}}
 
-/* --- 浙江：纸与墨 --- */
-.fx-veil.fx-ink{
+/* --- 浙江：展卷（纸面从右向左卷起，只用 transform，合成层零重绘） --- */
+.fx-veil.fx-scroll{background:transparent}
+.fx-veil.fx-scroll i{
+  position:absolute;inset:0;
   background:
-    radial-gradient(circle at var(--fx-x,50%) var(--fx-y,50%),
-      rgba(245,242,236,0) 0%,rgba(243,240,233,.12) 46%,rgba(238,234,226,.34) 100%),
-    radial-gradient(74% 64% at 54% 38%,rgba(35,40,34,.16) 0%,rgba(35,40,34,0) 70%);
-  animation:veilFade .5s cubic-bezier(.2,.7,.3,1) forwards;
+    linear-gradient(90deg,
+      #F5F2EB 0%,
+      #F0ECE4 58%,
+      #E6E0D5 94%,
+      #D8D0C1 100%);
+  box-shadow:inset -1px 0 0 rgba(60,55,45,.14);
+  transform-origin:100% 50%;
+  will-change:transform;
+  animation:scrollRoll .78s cubic-bezier(.72,.02,.28,1) forwards;
 }
-.fx-veil.fx-ink .ink-blot{
-  position:absolute;border-radius:50%;
-  background:radial-gradient(circle,rgba(33,39,33,.34) 0%,rgba(33,39,33,.12) 42%,rgba(33,39,33,0) 72%);
-  filter:blur(26px);
-  animation:blotIn 1.6s cubic-bezier(.2,.7,.3,1) forwards;
+.fx-veil.fx-scroll i:nth-child(2){animation-delay:.09s;background:#EFEBE3}
+.fx-veil.fx-scroll i:nth-child(3){
+  animation-delay:.18s;background:#F4F1EA;opacity:.72;
 }
-.ink-blot.a{left:14%;top:18%;width:48vmax;height:42vmax}
-.ink-blot.b{right:4%;bottom:4%;width:34vmax;height:34vmax;animation-delay:.08s;opacity:.8}
-@keyframes blotIn{
-  0%{opacity:0;transform:scale(.55)}
-  38%{opacity:.95}
-  100%{opacity:0;transform:scale(1.3)}
+@keyframes scrollRoll{
+  0%{transform:scaleX(1)}
+  100%{transform:scaleX(0)}
 }
-.gallery-modal.fx-ink .gallery-panel{
-  opacity:1;transform:none;
-  -webkit-mask-image:radial-gradient(circle,#000 0 44%,rgba(0,0,0,.62) 66%,rgba(0,0,0,0) 100%);
-  mask-image:radial-gradient(circle,#000 0 44%,rgba(0,0,0,.62) 66%,rgba(0,0,0,0) 100%);
-  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
-  -webkit-mask-position:var(--fx-x,50%) var(--fx-y,50%);
-  mask-position:var(--fx-x,50%) var(--fx-y,50%);
-  animation:inkBloom 1.35s cubic-bezier(.16,.78,.24,1) both;
+.gallery-modal.fx-scroll .gallery-panel{opacity:1;transform:none}
+.gallery-modal.fx-scroll .magazine-item{
+  opacity:1;transform:none;animation:none;
 }
-@keyframes inkBloom{
-  0%{-webkit-mask-size:22vmax 22vmax;mask-size:22vmax 22vmax;opacity:.85;filter:saturate(.55) contrast(1.04)}
-  100%{-webkit-mask-size:340vmax 340vmax;mask-size:340vmax 340vmax;opacity:1;filter:none}
+/* 只有前几张做极轻的落位，其余交给卷面揭示，避免二十多个图层同时起动画 */
+.gallery-modal.fx-scroll .magazine-item:nth-child(-n+6){
+  animation:scrollItem 1.15s cubic-bezier(.19,.86,.24,1) backwards;
+  animation-delay:calc(.04s + var(--i,0)*.05s);
 }
-.gallery-modal.fx-ink .magazine-item{
-  opacity:1;transform:none;
-  animation:inkItem 1.05s cubic-bezier(.16,.88,.24,1) backwards;
-  animation-delay:calc(.03s + var(--i,0)*.045s);
-}
-@keyframes inkItem{
-  0%{opacity:.16;filter:blur(9px) saturate(.4) contrast(1.04);transform:scale(1.012)}
-  45%{opacity:1;filter:blur(2px) saturate(.8)}
-  100%{opacity:1;filter:none;transform:none}
+@keyframes scrollItem{
+  0%{opacity:.2;transform:translate3d(-10px,10px,0)}
+  100%{opacity:1;transform:none}
 }
 
-/* --- 江苏：水与光 --- */
-.fx-veil.fx-ripple{
-  background:radial-gradient(circle at var(--fx-x,50%) var(--fx-y,50%),
-    rgba(244,241,235,.08) 0%,rgba(242,239,233,.28) 46%,rgba(236,232,224,.52) 100%);
-  animation:veilFade .45s cubic-bezier(.3,.8,.3,1) forwards;
+/* --- 江苏：帘幕（11 道竖栅交替升降，错时起帘，只用 transform） --- */
+.fx-veil.fx-lattice{
+  display:grid;grid-template-columns:repeat(11,minmax(0,1fr));
+  background:transparent;
 }
-.fx-veil.fx-ripple i{
-  position:absolute;left:var(--fx-x,50%);top:var(--fx-y,50%);
-  width:120px;height:120px;margin:-60px 0 0 -60px;
-  border-radius:50%;
-  box-shadow:
-    0 0 0 1px rgba(58,72,78,.62),
-    0 0 0 5px rgba(58,72,78,.08),
-    inset 0 0 22px rgba(255,255,255,.45);
-  opacity:0;transform:scale(.4);
-  animation:ringOut 1.6s cubic-bezier(.18,.86,.24,1) forwards;
+.fx-veil.fx-lattice i{
+  display:block;height:100%;
+  background:#F1EDE5;
+  border-right:1px solid rgba(70,82,86,.10);
+  will-change:transform;
+  animation:latticeLift .95s cubic-bezier(.66,.02,.34,1) forwards;
+  animation-delay:var(--delay,0s);
 }
-.fx-veil.fx-ripple i:nth-child(2){animation-delay:.14s;box-shadow:0 0 0 1px rgba(66,80,86,.26)}
-.fx-veil.fx-ripple i:nth-child(3){animation-delay:.3s;box-shadow:0 0 0 1px rgba(66,80,86,.15)}
-@keyframes ringOut{
-  0%{opacity:0;transform:scale(.4)}
-  18%{opacity:.9}
-  100%{opacity:0;transform:scale(13)}
+@keyframes latticeLift{
+  0%{transform:translate3d(0,0,0)}
+  100%{transform:translate3d(0,calc(var(--dir,1) * 101%),0)}
 }
-.gallery-modal.fx-ripple .gallery-panel{
-  opacity:1;transform:none;
-  -webkit-mask-image:radial-gradient(circle,#000 0 58%,rgba(0,0,0,.78) 74%,rgba(0,0,0,0) 100%);
-  mask-image:radial-gradient(circle,#000 0 58%,rgba(0,0,0,.78) 74%,rgba(0,0,0,0) 100%);
-  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
-  -webkit-mask-position:var(--fx-x,50%) var(--fx-y,50%);
-  mask-position:var(--fx-x,50%) var(--fx-y,50%);
-  animation:rippleBloom 1.3s cubic-bezier(.2,.86,.22,1) both;
+.gallery-modal.fx-lattice .gallery-panel{opacity:1;transform:none}
+.gallery-modal.fx-lattice .magazine-item{
+  opacity:1;transform:none;animation:none;
 }
-@keyframes rippleBloom{
-  0%{-webkit-mask-size:0 0;mask-size:0 0;opacity:.45}
-  45%{opacity:1}
-  100%{-webkit-mask-size:330vmax 330vmax;mask-size:330vmax 330vmax;opacity:1}
+.gallery-modal.fx-lattice .magazine-item:nth-child(-n+6){
+  animation:latticeItem 1.1s cubic-bezier(.19,.86,.24,1) backwards;
+  animation-delay:calc(.05s + var(--i,0)*.05s);
 }
-.gallery-modal.fx-ripple .magazine-item{
-  opacity:1;transform:none;
-  animation:waveItem .95s cubic-bezier(.16,.9,.24,1) backwards;
-  animation-delay:calc(.05s + var(--i,0)*.04s);
-}
-@keyframes waveItem{
-  0%{opacity:.18;transform:translateY(20px) scale(1.008);filter:blur(4px)}
-  65%{opacity:1}
-  100%{opacity:1;transform:none;filter:none}
+@keyframes latticeItem{
+  0%{opacity:.18;transform:translate3d(0,14px,0)}
+  100%{opacity:1;transform:none}
 }
 
 /* --- 西藏：空间与纵深 --- */
@@ -1007,13 +979,13 @@ footer{
   .gallery-close{top:15px;right:16px;width:39px;height:39px}
   .magazine{padding:80px 5vw 10vh}
   .magazine-grid{
-    display:flex;flex-direction:column;gap:13px;
-    grid-template-columns:none;grid-auto-rows:auto;
+    display:flex;flex-direction:column;flex-wrap:nowrap;gap:13px;
   }
   .magazine-item{
-    width:100%;height:auto;aspect-ratio:var(--ar,1.5);
-    grid-column:auto!important;grid-row:auto!important;
+    width:100%!important;height:auto!important;
+    aspect-ratio:var(--ar,1.5);
   }
+  .magazine-item img{object-fit:contain}
   .magazine-caption{padding:16px 10px 12px;font-size:8px}
   /* 手机没有 hover，用点击后的 focus 显示照片信息 */
   .magazine-item:focus .magazine-caption{opacity:1;transform:translateY(0)}
@@ -1323,7 +1295,7 @@ const countries=[
 ========================= */
 const regions=[
   {
-    id:"zhejiang",cn:"浙江",en:"ZHEJIANG",fx:"ink",fxLabel:"水墨渐显",
+    id:"zhejiang",cn:"浙江",en:"ZHEJIANG",fx:"scroll",fxLabel:"展卷",
     accent:"#6E7F6C",
     blurb:"Lake mist, tea hills and wet stone — the softest greens of the south.",
     cover:"photos/zhejiang/zj-05.jpg",
@@ -1356,7 +1328,7 @@ const regions=[
     ]
   },
   {
-    id:"jiangsu",cn:"江苏",en:"JIANGSU",fx:"ripple",fxLabel:"水波扩散",
+    id:"jiangsu",cn:"江苏",en:"JIANGSU",fx:"lattice",fxLabel:"帘幕",
     accent:"#7C8C95",
     blurb:"Canals, gardens and white walls. Water as a way of living.",
     cover:"photos/jiangsu/js-08.jpg",
@@ -1541,7 +1513,7 @@ let wheelDelta=0;
 let wheelReset=null;
 let fxTimer=null;
 
-const FX_CLASSES=["fx-ink","fx-ripple","fx-depth","fx-slice"];
+const FX_CLASSES=["fx-scroll","fx-lattice","fx-depth","fx-slice"];
 
 /* 统一锁定页面滚动 */
 function syncLock(){
@@ -1765,10 +1737,15 @@ function buildFxVeil(fx){
   const veil=document.createElement("div");
   veil.className=`fx-veil fx-${fx}`;
 
-  if(fx==="ink"){
-    veil.innerHTML='<span class="ink-blot a"></span><span class="ink-blot b"></span>';
-  }else if(fx==="ripple"){
+  if(fx==="scroll"){
     veil.innerHTML="<i></i><i></i><i></i>";
+  }else if(fx==="lattice"){
+    const count=11,mid=(count-1)/2;
+    veil.innerHTML=Array.from({length:count},(_,i)=>{
+      const dir=i%2?-1:1;
+      const delay=(Math.abs(i-mid)*0.045).toFixed(3);
+      return `<i style="--dir:${dir};--delay:${delay}s"></i>`;
+    }).join("");
   }else if(fx==="depth"){
     veil.innerHTML='<span class="depth-horizon"></span>';
   }else if(fx==="slice"){
@@ -1786,55 +1763,95 @@ function buildFxVeil(fx){
 /* =========================
    MAGAZINE GALLERY
 ========================= */
-/* 段落节奏表：每段给出 [栏宽, 行高, 下移行数]，段内栏宽之和 + 栏间空档 = 12 栏 */
-const BAND_SPECS=[
-  [[7,5,0],[4,4,1]],
-  [[4,4,1],[3,5,0],[3,3,2]],
-  [[12,5,0]],
-  [[3,5,1],[4,6,0],[3,4,2]],
-  [[4,4,1],[3,3,0],[3,5,1]],
-  [[4,5,0],[3,4,2],[3,4,1]],
-  [[4,4,0],[3,5,1],[3,4,2]],
-  [[3,4,0],[3,5,2],[4,6,0]]
-];
-
-function layoutMagazine(count){
-  const assigned=[];
-  let row=1,band=0,queued=0;
-  while(queued<count){
-    const spec=BAND_SPECS[band%BAND_SPECS.length];
-    band++;
-    let col=1,bottom=0;
-    for(const [w,h,down] of spec){
-      if(queued>=count)break;
-      assigned.push({col,colw:w,row:row+down,rowh:h});
-      bottom=Math.max(bottom,down+h);
-      col+=w+1;queued++;
-    }
-    row+=bottom;
-  }
-  return assigned;
+const warmed=new Set();
+function warmGallery(photos,limit){
+  (photos||[]).slice(0,limit||99).forEach(photo=>{
+    if(!photo.image||warmed.has(photo.image))return;
+    warmed.add(photo.image);
+    const img=new Image();
+    img.decoding="async";
+    img.src=photo.image;
+    if(img.decode)img.decode().catch(()=>{});
+  });
 }
+function preloadGallery(set){warmGallery(set.photos,9)}
+
+/* 版面节奏：每行的「密度目标」（= 该行所有照片宽高比之和）。
+   目标越大 → 这一行越高、照片越大；越小 → 越密、照片越小。
+   具体每条照片被放进哪一行、宽多少，都由 applyGeometry() 按真实宽高比实时算出，
+   所以任何一张都不会被裁边，也不会出现空洞 */
+const ROW_COUNTS=[2,3,1,3,2,2,4,3];
 
 function renderGallery(set){
   activeSet=set;
-  const slots=layoutMagazine(set.photos.length);
   magazineGrid.innerHTML=set.photos.map((photo,index)=>{
-    const slot=slots[index];
-    const ar=photo.ar||null;
+    const ar=photo.ar||1.5;
     return `
     <button class="magazine-item"
       data-photo-index="${index}"
-      style="grid-column:${slot.col}/span ${slot.colw};grid-row:${slot.row}/span ${slot.rowh};--d:${(index*0.06).toFixed(2)};${ar?`--ar:${ar}`:''}"
+      data-ar="${ar}"
+      style="--d:${(index*0.06).toFixed(2)};--i:${index};--ar:${ar}"
       aria-label="View ${photo.title}">
-      <img src="${photo.image}" alt="${photo.title}" loading="lazy">
+      <img src="${photo.image}" alt="${photo.title}" loading="lazy" decoding="async">
       <span class="magazine-caption">
         <span>${photo.place}</span>
         <span>${photo.time||photo.year}</span>
       </span>
     </button>`;
   }).join("");
+  applyGeometry();
 }
+
+/* 按真实比例排成一行一行：同一行共用高度，宽度随每张的比例不同而不同，整行刚好填满 */
+function applyGeometry(){
+  if(!activeSet)return;
+  const items=[...magazineGrid.querySelectorAll(".magazine-item")];
+  if(!items.length)return;
+
+  if(window.matchMedia("(max-width:760px)").matches){
+    items.forEach(el=>{el.style.width="";el.style.height="";});
+    return;
+  }
+
+  const cs=getComputedStyle(magazineGrid);
+  const gap=parseFloat(cs.columnGap)||18;
+  const W=magazineGrid.clientWidth;
+  if(!W)return;
+
+  let i=0,rowIndex=0;
+  while(i<items.length){
+    const want=ROW_COUNTS[rowIndex%ROW_COUNTS.length];
+    let count=Math.min(want,items.length-i);
+    let sum=0;
+    for(let k=0;k<count;k++)sum+=parseFloat(items[i+k].dataset.ar)||1.5;
+
+    let h=(W-gap*(count-1))/sum;
+    /* 一行太高就并进下一张，保证不出现超过大半个屏的巨幅；但不裁切 */
+    while(i+count<items.length&&h>W*0.82){
+      sum+=parseFloat(items[i+count].dataset.ar)||1.5;
+      count++;
+      h=(W-gap*(count-1))/sum;
+    }
+    /* 收尾只剩一张竖图：留白收边，不硬撑 */
+    if(i+count>=items.length&&count===1&&h>W*0.8)h=W*0.8;
+    h=Math.max(190,h);
+
+    for(let k=0;k<count;k++){
+      const el=items[i+k];
+      const ar=parseFloat(el.dataset.ar)||1.5;
+      el.style.height=`${h.toFixed(2)}px`;
+      el.style.width=`${(h*ar-1).toFixed(2)}px`;
+    }
+    i+=count;rowIndex++;
+  }
+}
+
+let geometryTimer=null;
+window.addEventListener("resize",()=>{
+  if(!activeSet||!galleryModal.classList.contains("open"))return;
+  clearTimeout(geometryTimer);
+  geometryTimer=window.setTimeout(applyGeometry,160);
+});
 
 function setGalleryHead(set){
   galleryModal.classList.toggle("is-region",set.type==="region");
@@ -1855,6 +1872,7 @@ function openGallery(set,options){
   const fx=options.fx||null;
   const origin=options.origin||{x:window.innerWidth/2,y:window.innerHeight*0.46};
 
+  preloadGallery(set);
   renderGallery(set);
   setGalleryHead(set);
 
@@ -1880,9 +1898,8 @@ function openGallery(set,options){
   if(fxTimer)clearTimeout(fxTimer);
   if(fx){
     fxTimer=window.setTimeout(()=>{
-      galleryModal.classList.remove(`fx-${fx}`);
       clearFxVeil();
-    },2150);
+    },1900);
   }
 }
 
@@ -1925,6 +1942,13 @@ countryViewImage.addEventListener("click",()=>{
 });
 countryViewOpen.addEventListener("click",enterSelectedGallery);
 
+countryGrid.addEventListener("pointerenter",event=>{
+  const card=event.target.closest("[data-country-id]");
+  if(!card)return;
+  const country=countries.find(item=>item.id===card.dataset.countryId);
+  if(country)warmGallery(country.photos);
+},true);
+
 countryGrid.addEventListener("click",event=>{
   const card=event.target.closest("[data-country-id]");
   if(!card)return;
@@ -1948,6 +1972,20 @@ countryGrid.addEventListener("click",event=>{
 });
 
 /* 选择地区 → 进入该地区图集，转场各不相同 */
+function warmByCard(card){
+  const region=regions.find(item=>item.id===card.dataset.regionId);
+  if(region)warmGallery(region.photos);
+}
+
+regionGrid.addEventListener("pointerenter",event=>{
+  const card=event.target.closest("[data-region-id]");
+  if(card)warmByCard(card);
+},true);
+regionGrid.addEventListener("touchstart",event=>{
+  const card=event.target.closest("[data-region-id]");
+  if(card)warmByCard(card);
+},{passive:true});
+
 regionGrid.addEventListener("click",event=>{
   const card=event.target.closest("[data-region-id]");
   if(!card)return;
@@ -2061,3 +2099,4 @@ document.addEventListener("keydown",event=>{
 </script>
 </body>
 </html>
+<!-- （注：内容由AI生成） -->
