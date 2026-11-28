@@ -49,14 +49,16 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:5px}
 }
 .loader-name span{
   display:inline-block;transform-origin:50% 100%;
-  animation:keyBounce .62s cubic-bezier(.22,1,.36,1) both;
-  animation-delay:calc(var(--i)*.11s);
+  animation:keyBounce 1.15s cubic-bezier(.34,.9,.36,1) infinite;
+  /* 负延迟：字母之间形成一道持续流动的波，而不是一次性依次落下 */
+  animation-delay:calc(var(--i) * -.118s);
 }
 @keyframes keyBounce{
-  0%{opacity:0;transform:translateY(18px) rotateX(-65deg) scaleY(.75)}
-  48%{opacity:1;transform:translateY(-8px) rotateX(12deg) scaleY(1.08)}
-  72%{transform:translateY(3px) rotateX(-5deg) scaleY(.97)}
-  100%{opacity:1;transform:translateY(0) rotateX(0) scaleY(1)}
+  0%{opacity:.6;transform:translateY(0) scaleY(1)}
+  16%{opacity:1;transform:translateY(-9px) scaleY(1.06)}
+  34%{opacity:.95;transform:translateY(0) scaleY(1)}
+  50%{opacity:.8;transform:translateY(3px) scaleY(.97)}
+  66%,100%{opacity:.6;transform:translateY(0) scaleY(1)}
 }
 .loader.done{opacity:0;visibility:hidden;pointer-events:none}
 .loader.done .loader-inner{animation:loaderExit .55s var(--ease) forwards}
@@ -74,7 +76,44 @@ header{
   gap:20px;font-size:11px;letter-spacing:.13em;text-transform:uppercase;
 }
 .logo{font-weight:700}
-.header-note{color:var(--muted);text-align:right}
+.header-note{color:var(--muted);text-align:right;flex:1}
+
+/* 语言切换：一个极小的 中 / EN */
+.lang-switch{
+  flex:none;display:inline-flex;align-items:center;gap:5px;
+  border:0;background:transparent;padding:2px;
+  font:inherit;letter-spacing:.12em;color:var(--muted);
+  cursor:pointer;
+}
+.lang-switch span[data-lang]{transition:color .35s ease}
+.lang-switch.is-zh span[data-lang="zh"],
+.lang-switch.is-en span[data-lang="en"]{color:var(--ink)}
+.lang-slash{opacity:.45}
+
+/* 环境声按钮：左下角一枚小圆，播放时三根细线轻微起伏 */
+.sound-toggle{
+  position:fixed;left:24px;bottom:22px;z-index:1301;
+  display:flex;align-items:flex-end;justify-content:center;gap:2.5px;
+  width:40px;height:40px;padding:0 0 12px;
+  border:1px solid rgba(41,40,32,.22);border-radius:50%;
+  background:rgba(241,238,232,.66);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  cursor:pointer;
+  transition:background .35s ease,border-color .35s ease;
+}
+.sound-toggle .bar{
+  display:block;width:2px;height:4px;border-radius:1px;
+  background:var(--ink);opacity:.5;
+  transition:opacity .35s ease;
+}
+.sound-toggle .bar:nth-child(2){height:8px}
+.sound-toggle.is-on{border-color:rgba(41,40,32,.42)}
+.sound-toggle.is-on .bar{opacity:.92;animation:soundBar .85s ease-in-out infinite alternate}
+.sound-toggle.is-on .bar:nth-child(2){animation-delay:.16s}
+.sound-toggle.is-on .bar:nth-child(3){animation-delay:.32s}
+.sound-toggle:hover{background:rgba(41,40,32,.9);border-color:rgba(41,40,32,.9)}
+.sound-toggle:hover .bar{background:#fff}
+@keyframes soundBar{0%{height:4px}100%{height:13px}}
 main{
   flex:1;display:flex;flex-direction:column;
   justify-content:center;padding:70px 0;
@@ -193,7 +232,7 @@ footer{
 .card-tint{
   position:absolute;z-index:-1;inset:0;
   pointer-events:none;
-  background:color-mix(in srgb,var(--hover-color) 74%,transparent);
+  background:color-mix(in srgb,var(--hover-color) 88%,transparent);
   opacity:0;
   will-change:opacity;
   /* 离开后长时间缓慢淡出 */
@@ -236,7 +275,7 @@ footer{
 }
 .country-card:hover .card-tint,
 .country-card.is-touched .card-tint{
-  opacity:.56;
+  opacity:.66;
   transition:opacity .55s cubic-bezier(.2,.9,.3,1);
 }
 .country-card:hover .country-card-shade{opacity:.9}
@@ -258,7 +297,7 @@ footer{
 .country-card:focus-visible .country-name,
 .country-card:focus .country-name{opacity:1;transform:translateY(0)}
 .country-card:focus-visible .card-tint,
-.country-card:focus .card-tint{opacity:.56}
+.country-card:focus .card-tint{opacity:.66}
 
 @keyframes cardReveal{
   from{opacity:0;transform:translateY(16px)}
@@ -638,6 +677,11 @@ footer{
   color:var(--muted);font-size:8px;letter-spacing:.18em;
   text-transform:uppercase;text-align:right;
 }
+.gallery-head.is-en .gh-cn{
+  font-family:var(--sans,"DM Sans",sans-serif);
+  font-size:clamp(20px,2.2vw,28px);
+  letter-spacing:.18em;text-transform:uppercase;
+}
 .gh-dot{
   display:inline-block;width:5px;height:5px;border-radius:50%;
   background:var(--fx-accent,#718477);
@@ -646,13 +690,14 @@ footer{
 
 /* 杂志版面 */
 .magazine{
-  width:min(1320px,100%);
+  width:min(1180px,100%);
   margin:0 auto;
-  padding:10vh 7vw 12vh;
+  padding:12vh 6vw 15vh;
 }
 .magazine-grid{
   display:flex;flex-wrap:wrap;
-  gap:clamp(12px,2vw,28px);
+  /* 行距刻意拉开，横向保持紧凑：版面靠空白呼吸 */
+  gap:clamp(54px,7.4vh,96px) clamp(10px,1.35vw,18px);
   align-items:flex-start;
 }
 .magazine-item{
@@ -946,6 +991,8 @@ footer{
 @media(max-width:760px){
   .page{padding:25px 6%}
   header{font-size:9px}
+  .header-note{display:none}
+  .sound-toggle{left:14px;bottom:14px;width:36px;height:36px;padding-bottom:10px}
   .greeting,.name-stage{font-size:clamp(29px,8vw,48px)}
   .name-stage{width:620px}
   .description{margin-top:75px}
@@ -1035,10 +1082,13 @@ footer{
 <div class="page" id="introPage">
   <header>
     <div class="logo">MIN. / PERSONAL ARCHIVE</div>
-    <div class="header-note">A collection of moments & thoughts</div>
+    <div class="header-note" data-i18n="header.note">A collection of moments & thoughts</div>
+    <button class="lang-switch is-en" id="langSwitch" type="button" aria-label="Switch language">
+      <span data-lang="zh">中</span><span class="lang-slash">/</span><span data-lang="en">EN</span>
+    </button>
   </header>
   <main>
-    <div class="intro">WELCOME TO MY WORLD</div>
+    <div class="intro" data-i18n="intro">WELCOME TO MY WORLD</div>
     <div class="title-line">
       <span class="greeting" id="greeting">Hi, I'm</span>
       <div class="name-stage" id="nameStage">
@@ -1047,8 +1097,8 @@ footer{
         <div class="word" id="wordN"><span class="first-letter"><span class="lower">n</span><span class="upper">N</span></span><span class="rest" id="restNotebook">otebook.</span></div>
       </div>
     </div>
-    <div class="hint" id="hint">HOLD & SLIDE TO THE RIGHT →</div>
-    <div class="description">
+    <div class="hint" id="hint" data-i18n="hint">HOLD & SLIDE TO THE RIGHT →</div>
+    <div class="description" data-i18n-html="description">
       A personal space for photography, travel, observations and little things worth remembering.<br><br>
       Here, I collect fragments of the world and pieces of myself.
     </div>
@@ -1059,22 +1109,22 @@ footer{
 <section class="projects" id="projects">
   <div class="projects-heading">
     <div>
-      <div class="projects-kicker">MY PERSONAL PHOTO ARCHIVE</div>
-      <h1 class="projects-title">Travel Projects</h1>
+      <div class="projects-kicker" data-i18n="projects.kicker">MY PERSONAL PHOTO ARCHIVE</div>
+      <h1 class="projects-title" data-i18n="projects.title">Travel Projects</h1>
     </div>
-    <div class="projects-note">COUNTRIES · JOURNEYS · MOMENTS</div>
+    <div class="projects-note" data-i18n="projects.note">COUNTRIES · JOURNEYS · MOMENTS</div>
   </div>
   <div class="country-grid" id="countryGrid"></div>
 </section>
 
 <section class="about">
-  <h2>A little about me.</h2>
-  <p>
+  <h2 data-i18n="about.title">A little about me.</h2>
+  <p data-i18n-html="about.body">
     A curious person collecting places, images, languages and stories.<br><br>
     This is my little corner of the internet. A place to keep the things I don't want to forget.
   </p>
 </section>
-<footer><span>© 2026 MIN.</span><span>MADE WITH CURIOSITY</span></footer>
+<footer><span>© 2026 MIN.</span><span data-i18n="footer.made">MADE WITH CURIOSITY</span></footer>
 
 <!-- 国家悬浮画框 -->
 <div class="country-view" id="countryView" aria-hidden="true">
@@ -1085,10 +1135,10 @@ footer{
     <div class="country-view-index" id="countryViewIndex"></div>
     <h2 class="country-view-title" id="countryViewTitle"></h2>
     <div class="country-view-local" id="countryViewLocal"></div>
-    <div class="country-view-hint">DRAG TO EXPLORE · CLICK THE FRAME TO ENTER</div>
+    <div class="country-view-hint" data-i18n="view.hint">DRAG TO EXPLORE · CLICK THE FRAME TO ENTER</div>
   </div>
   <button class="country-view-close" id="countryViewClose" aria-label="Close preview">×</button>
-  <button class="country-view-open" id="countryViewOpen">OPEN PHOTO COLLECTION ↗</button>
+  <button class="country-view-open" id="countryViewOpen" data-i18n="view.open">OPEN PHOTO COLLECTION ↗</button>
   <div class="country-view-nav">
     <button id="countryPrev" aria-label="Previous country">←</button>
     <button id="countryNext" aria-label="Next country">→</button>
@@ -1098,14 +1148,14 @@ footer{
 <!-- 中国 · 地区选择 -->
 <div class="region-view" id="regionView" aria-hidden="true">
   <div class="region-top">
-    <button class="region-back" id="regionBack">← ARCHIVE</button>
-    <div>CHINA / 中国</div>
+    <button class="region-back" id="regionBack" data-i18n="region.back">← ARCHIVE</button>
+    <div data-i18n="region.top">CHINA / 中国</div>
   </div>
 
   <div class="region-head">
     <div>
-      <div class="region-kicker">FOUR CHAPTERS</div>
-      <h2 class="region-title">中国</h2>
+      <div class="region-kicker" data-i18n="region.kicker">FOUR CHAPTERS</div>
+      <h2 class="region-title" data-i18n="region.title">中国</h2>
     </div>
     <div class="region-count"><span>04</span></div>
   </div>
@@ -1129,6 +1179,10 @@ footer{
   </div>
 </div>
 
+<button class="sound-toggle" id="soundToggle" type="button" aria-label="Ambient sound" aria-pressed="false">
+  <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+</button>
+
 <!-- 单张照片详情 -->
 <div class="photo-detail" id="photoDetail" aria-hidden="true">
   <button class="detail-close" id="detailClose" aria-label="Close photo detail">×</button>
@@ -1137,7 +1191,7 @@ footer{
       <img class="detail-image" id="detailImage" src="" alt="">
     </div>
     <div class="detail-copy">
-      <div class="detail-kicker">A MOMENT IN THE ARCHIVE</div>
+      <div class="detail-kicker" data-i18n="detail.kicker">A MOMENT IN THE ARCHIVE</div>
       <h3 class="detail-title" id="detailTitle"></h3>
       <p class="detail-place" id="detailPlace"></p>
       <p class="detail-year" id="detailYear"></p>
@@ -1151,11 +1205,19 @@ footer{
    LOADER
 ========================= */
 const loader=document.getElementById("loader");
+const loaderStart=performance.now();
 function hideLoader(){
+  if(loader.classList.contains("done"))return;
   loader.classList.add("done");
-  window.setTimeout(()=>loader.remove(),650);
+  window.setTimeout(()=>{if(loader.isConnected)loader.remove();},650);
 }
-window.addEventListener("load",()=>window.setTimeout(hideLoader,1450));
+/* 弹动一直循环，直到页面真的加载完成；只保留 1.2s 下限，避免一闪而过 */
+function finishLoading(){
+  const wait=Math.max(0,1200-(performance.now()-loaderStart));
+  window.setTimeout(hideLoader,wait);
+}
+if(document.readyState==="complete")finishLoading();
+else window.addEventListener("load",finishLoading,{once:true});
 
 /* =========================
    HOME TITLE DRAG ANIMATION
@@ -1236,7 +1298,7 @@ const countries=[
   name:"CHINA",
   local:"中国",
   cover:"https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=1400",
-  hoverColor:"#647B68",
+  hoverColor:"#2FA98D",
   description:"A collection of journeys through China, from familiar streets to distant landscapes. Each photograph keeps a small fragment of a place and a moment.",
   photos:[]
 },
@@ -1245,7 +1307,7 @@ const countries=[
   name:"UNITED ARAB EMIRATES",
   local:"阿联酋",
   cover:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1400",
-  hoverColor:"#B68C63",
+  hoverColor:"#E08A2E",
   description:"A visual diary of the United Arab Emirates, where desert landscapes, modern architecture and city life meet.",
   photos:[
     {title:"Lantern Alley",place:"Al Seef · 阿尔西夫",time:"2026.09.04 · 10:45",category:"TRAVEL",image:"photos/uae/ae-01.jpg",ar:0.75,description:"A narrow lane hung with glass lamps, the walls painted and sunlit, no one in it yet."},
@@ -1279,7 +1341,7 @@ const countries=[
   name:"GEORGIA",
   local:"格鲁吉亚",
   cover:"https://images.unsplash.com/photo-1565008576549-57569a49371d?w=1400",
-  hoverColor:"#788A9A",
+  hoverColor:"#5C7FD6",
   description:"A journey through Georgia, collecting old streets, mountain scenery, warm light and the atmosphere of the Caucasus.",
   photos:[
     {title:"Old Tbilisi",place:"Tbilisi, Georgia",year:"2027",category:"ARCHITECTURE",image:"https://images.unsplash.com/photo-1565008576549-57569a49371d?w=1600",description:"Old balconies, layered streets and the distinctive character of Tbilisi."},
@@ -1437,6 +1499,79 @@ preloadCountryAssets();
    BUILD COUNTRY CARDS
 ========================= */
 const countryGrid=document.getElementById("countryGrid");
+const langSwitch=document.getElementById("langSwitch");
+
+/* =========================
+   LANGUAGE
+========================= */
+const I18N={
+  en:{
+    "header.note":"A collection of moments & thoughts",
+    "intro":"WELCOME TO MY WORLD",
+    "hint":"HOLD & SLIDE TO THE RIGHT →",
+    "description":"A personal space for photography, travel, observations and little things worth remembering.<br><br>Here, I collect fragments of the world and pieces of myself.",
+    "projects.kicker":"MY PERSONAL PHOTO ARCHIVE",
+    "projects.title":"Travel Projects",
+    "projects.note":"COUNTRIES · JOURNEYS · MOMENTS",
+    "about.title":"A little about me.",
+    "about.body":"A curious person collecting places, images, languages and stories.<br><br>This is my little corner of the internet. A place to keep the things I don't want to forget.",
+    "view.hint":"DRAG TO EXPLORE · CLICK THE FRAME TO ENTER",
+    "view.open":"OPEN PHOTO COLLECTION ↗",
+    "region.back":"← ARCHIVE",
+    "region.top":"CHINA / 中国",
+    "region.kicker":"FOUR CHAPTERS",
+    "region.title":"China",
+    "detail.kicker":"A MOMENT IN THE ARCHIVE",
+    "footer.made":"MADE WITH CURIOSITY",
+    "index.prefix":"TRAVEL PROJECT"
+  },
+  zh:{
+    "header.note":"关于瞬间与思绪的收藏",
+    "intro":"欢迎来到我的世界",
+    "hint":"按住向右拖动 →",
+    "description":"一个属于摄影、旅行与日常观察的私人空间，<br>收着那些值得留下的小事。<br><br>在这里，我收集世界的碎片，也收集自己。",
+    "projects.kicker":"我的影像档案",
+    "projects.title":"旅行志",
+    "projects.note":"国家 · 旅程 · 瞬间",
+    "about.title":"关于我",
+    "about.body":"一个好奇的人，收集地方、影像、语言与故事。<br><br>这是我在这张网上的一点小角落，用来存放不想忘记的东西。",
+    "view.hint":"拖动探索 · 点击画框进入",
+    "view.open":"打开图集 ↗",
+    "region.back":"← 返回",
+    "region.top":"中国 / CHINA",
+    "region.kicker":"四个章节",
+    "region.title":"中国",
+    "detail.kicker":"档案中的一瞬",
+    "footer.made":"以好奇心制作",
+    "index.prefix":"旅行项目"
+  }
+};
+
+let lang="en";
+
+function t(key){
+  const dict=I18N[lang]||I18N.en;
+  if(dict[key]!==undefined)return dict[key];
+  return I18N.en[key]||"";
+}
+
+function applyLang(next){
+  lang=next;
+  document.documentElement.lang=lang==="zh"?"zh-CN":"en";
+  document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=t(el.dataset.i18n)});
+  document.querySelectorAll("[data-i18n-html]").forEach(el=>{el.innerHTML=t(el.dataset.i18nHtml)});
+  if(langSwitch){
+    langSwitch.classList.toggle("is-zh",lang==="zh");
+    langSwitch.classList.toggle("is-en",lang==="en");
+  }
+  renderCountryCards();
+  renderRegionCards();
+  if(countryView.classList.contains("open"))updateCountryContent(previewIndex);
+  if(galleryModal.classList.contains("open")&&activeSet)setGalleryHead(activeSet);
+  try{localStorage.setItem("min-lang",lang)}catch(error){}
+}
+
+function renderCountryCards(){
 countryGrid.innerHTML=countries.map(country=>`
   <button class="country-card"
     data-country-id="${country.id}"
@@ -1445,10 +1580,11 @@ countryGrid.innerHTML=countries.map(country=>`
     <span class="card-tint"></span>
     <span class="country-card-shade"></span>
     <span class="country-card-content">
-      <span class="country-name">${country.name}</span>
+      <span class="country-name">${lang==="zh"?country.local:country.name}</span>
     </span>
   </button>
 `).join("");
+}
 
 /* 触碰预览：按下浮现色块，松开后缓慢回弹消失 */
 countryGrid.addEventListener("pointerdown",event=>{
@@ -1529,9 +1665,9 @@ function syncLock(){
 function updateCountryContent(index){
   const country=countries[index];
   countryViewIndex.textContent=
-    `TRAVEL PROJECT / ${String(index+1).padStart(2,"0")} · ${String(countries.length).padStart(2,"0")}`;
-  countryViewTitle.textContent=country.name;
-  countryViewLocal.textContent=country.local;
+    `${t("index.prefix")} / ${String(index+1).padStart(2,"0")} · ${String(countries.length).padStart(2,"0")}`;
+  countryViewTitle.textContent=lang==="zh"?country.local:country.name;
+  countryViewLocal.textContent=lang==="zh"?country.name:country.local;
   countryView.style.setProperty("--country-accent",country.hoverColor||"#718477");
 }
 
@@ -1683,6 +1819,7 @@ function closeCountryPreview(keepLock){
 /* =========================
    CHINA · REGION INDEX
 ========================= */
+function renderRegionCards(){
 regionGrid.innerHTML=regions.map((region,index)=>`
   <button class="region-card"
     data-region-id="${region.id}"
@@ -1693,11 +1830,12 @@ regionGrid.innerHTML=regions.map((region,index)=>`
     <span class="region-scrim"></span>
     <span class="region-no">${String(index+1).padStart(2,"0")}</span>
     <span class="region-body">
-      <span class="region-cn">${region.cn}</span>
+      <span class="region-cn">${lang==="zh"?region.cn:region.en}</span>
       <span class="region-rule"></span>
     </span>
   </button>
 `).join("");
+}
 
 function openRegionView(origin){
   if(origin){
@@ -1781,6 +1919,8 @@ function preloadGallery(set){warmGallery(set.photos,9)}
    具体每条照片被放进哪一行、宽多少，都由 applyGeometry() 按真实宽高比实时算出，
    所以任何一张都不会被裁边，也不会出现空洞 */
 const ROW_COUNTS=[2,3,1,3,2,2,4,3];
+/* 每一行的左缩进（占容器宽的千分比节奏）：让行与行错落，留出刊物式的边白 */
+const ROW_INSETS=[0,.10,.04,.16,.02,.12,.06,.18];
 
 function renderGallery(set){
   activeSet=set;
@@ -1809,39 +1949,52 @@ function applyGeometry(){
   if(!items.length)return;
 
   if(window.matchMedia("(max-width:760px)").matches){
-    items.forEach(el=>{el.style.width="";el.style.height="";});
+    items.forEach(el=>{el.style.width="";el.style.height="";el.style.marginLeft="";});
     return;
   }
 
   const cs=getComputedStyle(magazineGrid);
-  const gap=parseFloat(cs.columnGap)||18;
+  const gap=parseFloat(cs.columnGap)||14;
   const W=magazineGrid.clientWidth;
   if(!W)return;
 
+  items.forEach(el=>{el.style.marginLeft="";});
+
   let i=0,rowIndex=0;
   while(i<items.length){
+    const inset=Math.round(W*ROW_INSETS[rowIndex%ROW_INSETS.length]);
+    const avail=W-inset;
     const want=ROW_COUNTS[rowIndex%ROW_COUNTS.length];
     let count=Math.min(want,items.length-i);
     let sum=0;
     for(let k=0;k<count;k++)sum+=parseFloat(items[i+k].dataset.ar)||1.5;
 
-    let h=(W-gap*(count-1))/sum;
-    /* 一行太高就并进下一张，保证不出现超过大半个屏的巨幅；但不裁切 */
-    while(i+count<items.length&&h>W*0.82){
+    const calc=c=>(avail-gap*(c-1)-6)/sum;
+    let h=calc(count);
+    /* 一行太高就并进下一张：单张最多 0.84W，多张最多 0.60W，其余交给留白 */
+    while(i+count<items.length&&h>(count===1?W*0.84:W*0.60)){
       sum+=parseFloat(items[i+count].dataset.ar)||1.5;
       count++;
-      h=(W-gap*(count-1))/sum;
+      h=calc(count);
+    }
+    /* 一行被压得太矮就退回一张，宁可横排短一点，也不把照片挤成邮 stamps */
+    const MIN_ROW=170;
+    while(count>1&&h<MIN_ROW){
+      count--;
+      sum-=parseFloat(items[i+count].dataset.ar)||1.5;
+      h=calc(count);
     }
     /* 收尾只剩一张竖图：留白收边，不硬撑 */
-    if(i+count>=items.length&&count===1&&h>W*0.8)h=W*0.8;
-    h=Math.max(190,h);
+    if(i+count>=items.length&&count===1&&h>W*0.72)h=W*0.72;
+    h=Math.max(150,h);
 
     for(let k=0;k<count;k++){
       const el=items[i+k];
       const ar=parseFloat(el.dataset.ar)||1.5;
       el.style.height=`${h.toFixed(2)}px`;
-      el.style.width=`${(h*ar-1).toFixed(2)}px`;
+      el.style.width=`${(h*ar-1.5).toFixed(2)}px`;
     }
+    if(inset&&items[i])items[i].style.marginLeft=`${inset}px`;
     i+=count;rowIndex++;
   }
 }
@@ -1856,9 +2009,10 @@ window.addEventListener("resize",()=>{
 function setGalleryHead(set){
   galleryModal.classList.toggle("is-region",set.type==="region");
   photoDetail.classList.toggle("is-region",set.type==="region");
+  galleryHead.classList.toggle("is-en",lang==="en");
   if(set.type==="region"){
     galleryHead.classList.add("is-on");
-    ghCn.textContent=set.cn;
+    ghCn.textContent=lang==="zh"?set.cn:(set.en||set.cn);
     galleryModal.style.setProperty("--fx-accent",set.accent||"#718477");
   }else{
     galleryHead.classList.remove("is-on");
@@ -2096,7 +2250,110 @@ document.addEventListener("keydown",event=>{
   else if(countryView.classList.contains("open"))closeCountryPreview();
   else if(regionView.classList.contains("open"))closeRegionView();
 });
+
+/* =========================
+   AMBIENT SOUND · 用 Web Audio 现场合成，不加载任何音频文件
+========================= */
+const soundToggle=document.getElementById("soundToggle");
+let audioCtx=null,audioMaster=null,audioRunning=false,audioSuspendTimer=null;
+
+function buildAmbient(){
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return null;
+  const ctx=new AC();
+  const sr=ctx.sampleRate;
+  const buf=ctx.createBuffer(1,sr*4,sr);
+  const ch=buf.getChannelData(0);
+  /* 布朗噪声：低频更厚，听感接近风与水，而不是白噪声的“沙沙” */
+  let last=0;
+  for(let i=0;i<ch.length;i++){
+    const white=Math.random()*2-1;
+    last=(last+0.02*white)/1.02;
+    ch[i]=last*3.4;
+  }
+
+  const src=ctx.createBufferSource();
+  src.buffer=buf;src.loop=true;
+
+  const hp=ctx.createBiquadFilter();
+  hp.type="highpass";hp.frequency.value=90;
+
+  const lp=ctx.createBiquadFilter();
+  lp.type="lowpass";lp.frequency.value=340;lp.Q.value=.65;
+
+  const master=ctx.createGain();
+  master.gain.value=0;
+
+  /* 极慢的滤波漂移 + 极轻的幅度呼吸，让底噪一直在缓慢变化 */
+  const drift=ctx.createOscillator();
+  drift.type="sine";drift.frequency.value=0.06;
+  const driftGain=ctx.createGain();driftGain.gain.value=130;
+  drift.connect(driftGain).connect(lp.frequency);
+
+  const breath=ctx.createOscillator();
+  breath.type="sine";breath.frequency.value=0.11;
+  const breathGain=ctx.createGain();breathGain.gain.value=0.014;
+  breath.connect(breathGain).connect(master.gain);
+
+  src.connect(hp).connect(lp).connect(master).connect(ctx.destination);
+  src.start();drift.start();breath.start();
+  return {ctx:ctx,master:master};
+}
+
+function startAmbient(){
+  if(!audioCtx){
+    const built=buildAmbient();
+    if(!built)return;
+    audioCtx=built.ctx;audioMaster=built.master;
+  }
+  if(audioCtx.state==="suspended")audioCtx.resume();
+  const now=audioCtx.currentTime;
+  audioMaster.gain.cancelScheduledValues(now);
+  audioMaster.gain.setValueAtTime(Math.max(audioMaster.gain.value,0.0001),now);
+  audioMaster.gain.linearRampToValueAtTime(0.05,now+1.6);
+  audioRunning=true;
+  soundToggle.classList.add("is-on");
+  soundToggle.setAttribute("aria-pressed","true");
+}
+
+function stopAmbient(){
+  if(!audioCtx)return;
+  const now=audioCtx.currentTime;
+  audioMaster.gain.cancelScheduledValues(now);
+  audioMaster.gain.setValueAtTime(audioMaster.gain.value,now);
+  audioMaster.gain.linearRampToValueAtTime(0,now+1.0);
+  audioRunning=false;
+  soundToggle.classList.remove("is-on");
+  soundToggle.setAttribute("aria-pressed","false");
+  clearTimeout(audioSuspendTimer);
+  audioSuspendTimer=window.setTimeout(()=>{
+    if(audioCtx&&!audioRunning&&audioCtx.state==="running")audioCtx.suspend();
+  },1200);
+}
+
+soundToggle.addEventListener("click",()=>{
+  if(audioRunning)stopAmbient();else startAmbient();
+});
+
+document.addEventListener("visibilitychange",()=>{
+  if(!audioCtx)return;
+  if(document.hidden){
+    if(audioCtx.state==="running")audioCtx.suspend();
+  }else if(audioRunning&&audioCtx.state==="suspended"){
+    audioCtx.resume();
+  }
+});
+
+/* =========================
+   INIT
+========================= */
+langSwitch.addEventListener("click",()=>applyLang(lang==="zh"?"en":"zh"));
+
+(function initLang(){
+  let saved=null;
+  try{saved=localStorage.getItem("min-lang");}catch(error){}
+  applyLang(saved==="zh"?"zh":"en");
+})();
 </script>
 </body>
 </html>
-<!-- （注：内容由AI生成） -->
